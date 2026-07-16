@@ -31,6 +31,11 @@ class UserManagementController extends Controller
             $query->where('role', $request->role);
         }
 
+        // Account type filter (masyarakat / lembaga)
+        if ($request->has('account_type') && in_array($request->account_type, ['masyarakat', 'lembaga'])) {
+            $query->where('account_type', $request->account_type);
+        }
+
         $users = $query->orderBy('created_at', 'desc')->paginate(10)->withQueryString();
 
         return view('admin.users', compact('users'));
@@ -64,17 +69,34 @@ class UserManagementController extends Controller
      */
     public function update(Request $request, User $user)
     {
+        // Handle lembaga validation action from detail modal
+        if ($request->has('validation_action')) {
+            $validated = $request->validate([
+                'validation_action' => ['required', 'in:validated,rejected'],
+                'validation_note'   => ['nullable', 'string', 'max:500'],
+            ]);
+
+            $user->update([
+                'validation_status' => $validated['validation_action'],
+                'validation_note'   => $validated['validation_note'] ?? null,
+            ]);
+
+            $label = $validated['validation_action'] === 'validated' ? 'disetujui dan diaktifkan' : 'ditolak';
+            return redirect()->route('admin.users.index')
+                ->with('success', "Akun lembaga '{$user->nama_lembaga}' berhasil {$label}.");
+        }
+
         $validated = $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
+            'name'     => ['required', 'string', 'max:255'],
+            'email'    => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
             'password' => ['nullable', 'string', 'min:8'],
-            'role' => ['required', Rule::in(['admin', 'user'])],
+            'role'     => ['required', Rule::in(['admin', 'user'])],
         ]);
 
         $updateData = [
-            'name' => $validated['name'],
+            'name'  => $validated['name'],
             'email' => $validated['email'],
-            'role' => $validated['role'],
+            'role'  => $validated['role'],
         ];
 
         // Only update password if filled

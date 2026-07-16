@@ -55,6 +55,8 @@
                         @if(Auth::user()->isAdmin())
                             <a href="{{ route('admin.users.index') }}" class="text-sm font-medium transition-colors {{ Route::is('admin.users.*') ? 'text-emerald-400' : 'text-slate-300 hover:text-white' }}">User Management</a>
                         @endif
+                        
+                        <a href="{{ route('profile.edit') }}" class="text-sm font-medium transition-colors {{ Route::is('profile.*') ? 'text-emerald-400' : 'text-slate-300 hover:text-white' }}">Profil</a>
                     @endauth
                 </nav>
 
@@ -99,6 +101,7 @@
                 @if(Auth::user()->isAdmin())
                     <a href="{{ route('admin.users.index') }}" class="block px-3 py-2 rounded-lg text-base font-semibold {{ Route::is('admin.users.*') ? 'bg-emerald-500/10 text-emerald-400' : 'text-slate-300 hover:bg-slate-900 hover:text-white' }}">User Management</a>
                 @endif
+                <a href="{{ route('profile.edit') }}" class="block px-3 py-2 rounded-lg text-base font-semibold {{ Route::is('profile.*') ? 'bg-emerald-500/10 text-emerald-400' : 'text-slate-300 hover:bg-slate-900 hover:text-white' }}">Profil</a>
             @endauth
         </div>
     </header>

@@ -41,7 +41,17 @@
                     </select>
                 </div>
 
-                @if(request('search') || request('role'))
+                <div class="flex items-center gap-2">
+                    <label class="text-xs font-semibold text-slate-400 uppercase tracking-wide">Tipe Akun:</label>
+                    <select name="account_type" onchange="this.form.submit()" 
+                        class="rounded-xl bg-slate-950 border border-slate-800 px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500">
+                        <option value="">Semua Tipe</option>
+                        <option value="masyarakat" {{ request('account_type') === 'masyarakat' ? 'selected' : '' }}>Masyarakat</option>
+                        <option value="lembaga"    {{ request('account_type') === 'lembaga'    ? 'selected' : '' }}>Lembaga / Instansi</option>
+                    </select>
+                </div>
+
+                @if(request('search') || request('role') || request('account_type'))
                     <a href="{{ route('admin.users.index') }}" class="text-xs text-rose-400 hover:text-rose-300 font-bold ml-2">Reset Filter</a>
                 @endif
             </div>
@@ -58,6 +68,7 @@
                         <th class="px-6 py-4">Nama</th>
                         <th class="px-6 py-4">Email</th>
                         <th class="px-6 py-4">Peran</th>
+                        <th class="px-6 py-4">Tipe Akun</th>
                         <th class="px-6 py-4">Dibuat Pada</th>
                         <th class="px-6 py-4 text-right">Aksi</th>
                     </tr>
@@ -68,12 +79,42 @@
                             <td class="px-6 py-4 text-xs font-semibold text-slate-400">#{{ $u->id }}</td>
                             <td class="px-6 py-4">
                                 <div class="font-bold text-white text-sm">{{ $u->name }}</div>
+                                @if($u->isLembaga())
+                                    <div class="text-xs text-slate-500 mt-0.5 font-medium">{{ $u->nama_lembaga }}</div>
+                                @endif
                             </td>
                             <td class="px-6 py-4 text-slate-300 text-sm font-medium">{{ $u->email }}</td>
                             <td class="px-6 py-4">
                                 <span class="inline-flex items-center rounded-md px-2 py-0.5 text-xs font-bold {{ $u->isAdmin() ? 'bg-indigo-400/10 text-indigo-400 ring-1 ring-inset ring-indigo-400/20' : 'bg-emerald-400/10 text-emerald-400 ring-1 ring-inset ring-emerald-400/20' }}">
                                     {{ ucfirst($u->role) }}
                                 </span>
+                            </td>
+                            <td class="px-6 py-4">
+                                @if($u->isLembaga())
+                                    <div class="flex flex-col gap-1">
+                                        <span class="inline-flex items-center rounded-md px-2 py-0.5 text-xs font-bold bg-violet-400/10 text-violet-400 ring-1 ring-inset ring-violet-400/20 w-fit">
+                                            Lembaga
+                                        </span>
+                                        {{-- Validation status badge --}}
+                                        @if($u->validation_status === 'pending')
+                                            <span class="inline-flex items-center rounded-md px-2 py-0.5 text-xs font-bold bg-amber-400/10 text-amber-400 ring-1 ring-inset ring-amber-400/20 w-fit">
+                                                Pending
+                                            </span>
+                                        @elseif($u->validation_status === 'validated')
+                                            <span class="inline-flex items-center rounded-md px-2 py-0.5 text-xs font-bold bg-emerald-400/10 text-emerald-400 ring-1 ring-inset ring-emerald-400/20 w-fit">
+                                                ✓ Terverifikasi
+                                            </span>
+                                        @else
+                                            <span class="inline-flex items-center rounded-md px-2 py-0.5 text-xs font-bold bg-rose-400/10 text-rose-400 ring-1 ring-inset ring-rose-400/20 w-fit">
+                                                ✗ Ditolak
+                                            </span>
+                                        @endif
+                                    </div>
+                                @else
+                                    <span class="inline-flex items-center rounded-md px-2 py-0.5 text-xs font-bold bg-sky-400/10 text-sky-400 ring-1 ring-inset ring-sky-400/20">
+                                        Masyarakat
+                                    </span>
+                                @endif
                             </td>
                             <td class="px-6 py-4 text-slate-400 text-xs">{{ $u->created_at->format('d M Y, H:i') }}</td>
                             <td class="px-6 py-4 text-right">
@@ -82,6 +123,13 @@
                                     <button onclick="openEditModal({{ json_encode($u) }})" class="inline-flex items-center justify-center rounded-lg bg-slate-800 px-3 py-1.5 text-xs font-bold text-slate-200 hover:bg-slate-700 hover:text-white transition">
                                         Edit
                                     </button>
+
+                                    @if($u->isLembaga())
+                                        <!-- View Lembaga Detail -->
+                                        <button onclick="openLembagaDetailModal({{ json_encode($u) }})" class="inline-flex items-center justify-center rounded-lg bg-violet-500/10 px-3 py-1.5 text-xs font-bold text-violet-400 hover:bg-violet-500/20 transition">
+                                            Detail
+                                        </button>
+                                    @endif
 
                                     <!-- Delete Form -->
                                     @if($u->id !== Auth::id())
@@ -100,7 +148,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="px-6 py-10 text-center text-slate-500 text-sm">
+                            <td colspan="7" class="px-6 py-10 text-center text-slate-500 text-sm">
                                 Tidak ada pengguna ditemukan.
                             </td>
                         </tr>
@@ -213,6 +261,85 @@
     </div>
 </div>
 
+<!-- ================= LEMBAGA DETAIL MODAL ================= -->
+<div id="lembaga-detail-modal" class="fixed inset-0 z-50 hidden bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="glass-panel w-full max-w-lg rounded-2xl p-6 shadow-2xl relative animate-scale-up border border-violet-500/20" style="max-height:90vh; overflow-y:auto;">
+        <!-- Close Button -->
+        <button onclick="closeModal('lembaga-detail-modal')" class="absolute top-4 right-4 text-slate-400 hover:text-white text-lg">&times;</button>
+
+        <h3 class="text-xl font-extrabold text-white mb-1">Detail Lembaga</h3>
+        <p class="text-xs text-slate-500 mb-6">Informasi legalitas dan status verifikasi akun lembaga</p>
+
+        <!-- Info Grid -->
+        <div class="space-y-3 mb-6">
+            <div class="flex justify-between gap-4 py-2 border-b border-slate-800/60">
+                <span class="text-xs font-bold text-slate-500 uppercase tracking-wide">Penanggung Jawab</span>
+                <span id="detail_penanggung" class="text-xs text-white font-medium text-right">-</span>
+            </div>
+            <div class="flex justify-between gap-4 py-2 border-b border-slate-800/60">
+                <span class="text-xs font-bold text-slate-500 uppercase tracking-wide">Nama Lembaga</span>
+                <span id="detail_nama_lembaga" class="text-xs text-white font-medium text-right">-</span>
+            </div>
+            <div class="flex justify-between gap-4 py-2 border-b border-slate-800/60">
+                <span class="text-xs font-bold text-slate-500 uppercase tracking-wide">Jenis Lembaga</span>
+                <span id="detail_jenis" class="text-xs text-white font-medium text-right">-</span>
+            </div>
+            <div class="flex justify-between gap-4 py-2 border-b border-slate-800/60">
+                <span class="text-xs font-bold text-slate-500 uppercase tracking-wide">No. Akta Pendirian</span>
+                <span id="detail_no_akta" class="text-xs text-white font-medium text-right">-</span>
+            </div>
+            <div class="flex justify-between gap-4 py-2 border-b border-slate-800/60">
+                <span class="text-xs font-bold text-slate-500 uppercase tracking-wide">NPWP</span>
+                <span id="detail_npwp" class="text-xs text-white font-mono text-right">-</span>
+            </div>
+            <div class="flex justify-between gap-4 py-2 border-b border-slate-800/60">
+                <span class="text-xs font-bold text-slate-500 uppercase tracking-wide">Alamat</span>
+                <span id="detail_alamat" class="text-xs text-white font-medium text-right max-w-xs">-</span>
+            </div>
+            <div class="flex justify-between gap-4 py-2 border-b border-slate-800/60">
+                <span class="text-xs font-bold text-slate-500 uppercase tracking-wide">Dokumen Legalitas</span>
+                <a id="detail_dokumen_link" href="#" target="_blank" class="text-xs text-emerald-400 hover:underline font-medium hidden">
+                    Lihat Dokumen ↗
+                </a>
+            </div>
+            <div class="flex justify-between gap-4 py-2 border-b border-slate-800/60">
+                <span class="text-xs font-bold text-slate-500 uppercase tracking-wide">Status Verifikasi</span>
+                <span id="detail_status" class="text-xs font-medium text-right">-</span>
+            </div>
+            <div class="py-2">
+                <span class="text-xs font-bold text-slate-500 uppercase tracking-wide block mb-1">Catatan Admin</span>
+                <span id="detail_note" class="text-xs text-slate-400 italic">-</span>
+            </div>
+        </div>
+
+        <!-- Validation Actions -->
+        <div class="flex flex-wrap gap-3 pt-4 border-t border-slate-900">
+            <form id="validate-form" method="POST" class="inline">
+                @csrf
+                @method('PUT')
+                <input type="hidden" name="validation_action" value="validated">
+                <button type="submit" onclick="return confirm('Setujui dan aktifkan akun lembaga ini?')"
+                    class="rounded-xl bg-emerald-500/10 px-4 py-2 text-xs font-bold text-emerald-400 ring-1 ring-emerald-500/30 hover:bg-emerald-500/20 transition">
+                    ✓ Setujui & Aktifkan
+                </button>
+            </form>
+            <form id="reject-form" method="POST" class="inline">
+                @csrf
+                @method('PUT')
+                <input type="hidden" name="validation_action" value="rejected">
+                <button type="submit" onclick="return confirm('Tolak pendaftaran lembaga ini?')"
+                    class="rounded-xl bg-rose-500/10 px-4 py-2 text-xs font-bold text-rose-400 ring-1 ring-rose-500/30 hover:bg-rose-500/20 transition">
+                    ✗ Tolak Pendaftaran
+                </button>
+            </form>
+            <button type="button" onclick="closeModal('lembaga-detail-modal')"
+                class="rounded-xl bg-slate-900 px-4 py-2 text-xs font-semibold text-slate-400 ring-1 ring-slate-800 hover:bg-slate-800 transition ml-auto">
+                Tutup
+            </button>
+        </div>
+    </div>
+</div>
+
 <script>
     function openModal(id) {
         document.getElementById(id).classList.remove('hidden');
@@ -233,6 +360,45 @@
         form.action = `/admin/users/${user.id}`;
 
         openModal('edit-modal');
+    }
+
+    function openLembagaDetailModal(user) {
+        const jenisMap = {
+            'perusahaan': 'Perusahaan',
+            'lks': 'Lembaga Kesejahteraan Sosial (LKS)',
+            'instansi_pemerintah': 'Instansi Pemerintah',
+            'organisasi_sosial': 'Organisasi Sosial',
+        };
+        const statusMap = {
+            'pending': '<span class="font-bold text-amber-400">⏳ Menunggu Verifikasi</span>',
+            'validated': '<span class="font-bold text-emerald-400">✓ Terverifikasi</span>',
+            'rejected': '<span class="font-bold text-rose-400">✗ Ditolak</span>',
+        };
+        document.getElementById('detail_penanggung').textContent = user.name;
+        document.getElementById('detail_nama_lembaga').textContent = user.nama_lembaga || '-';
+        document.getElementById('detail_jenis').textContent = jenisMap[user.jenis_lembaga] || '-';
+        document.getElementById('detail_no_akta').textContent = user.no_akta || '-';
+        document.getElementById('detail_npwp').textContent = user.npwp || '-';
+        document.getElementById('detail_alamat').textContent = user.alamat_lembaga || '-';
+        document.getElementById('detail_status').innerHTML = statusMap[user.validation_status] || '-';
+        document.getElementById('detail_note').textContent = user.validation_note || 'Tidak ada catatan.';
+
+        // Validate form action
+        const validateForm = document.getElementById('validate-form');
+        const rejectForm   = document.getElementById('reject-form');
+        if (validateForm) validateForm.action = `/admin/users/${user.id}`;
+        if (rejectForm)   rejectForm.action   = `/admin/users/${user.id}`;
+
+        // Show/hide document link
+        const docLink = document.getElementById('detail_dokumen_link');
+        if (user.dokumen_legalitas) {
+            docLink.href = `/storage/${user.dokumen_legalitas}`;
+            docLink.classList.remove('hidden');
+        } else {
+            docLink.classList.add('hidden');
+        }
+
+        openModal('lembaga-detail-modal');
     }
 </script>
 @endsection

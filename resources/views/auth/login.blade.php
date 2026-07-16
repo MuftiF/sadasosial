@@ -78,6 +78,19 @@
                 </div>
             </div>
         </div> -->
+        <!-- Register Links -->
+        <div class="mt-6 text-center space-y-2">
+            <p class="text-sm text-slate-500">
+                Belum punya akun?
+                <a href="{{ route('register.lembaga') }}" class="font-semibold text-emerald-400 hover:text-emerald-300 transition-colors">
+                    Daftar sebagai Lembaga / Instansi
+                </a>
+            </p>
+            <p class="text-xs text-slate-600">
+                Atau daftar sebagai
+                <a href="#" class="text-teal-400 hover:text-teal-300 font-medium transition-colors">Masyarakat Perorangan</a>
+            </p>
+        </div>
     </div>
 </div>
 @endsection
