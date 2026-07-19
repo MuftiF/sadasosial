@@ -52,6 +52,8 @@
                     @auth
                         <a href="{{ route('dashboard') }}" class="text-sm font-medium transition-colors {{ Route::is('dashboard') ? 'text-emerald-400' : 'text-slate-300 hover:text-white' }}">Dashboard</a>
                         
+                        <a href="{{ route('perizinan.index') }}" class="text-sm font-medium transition-colors {{ Request::is('perizinan*') || Request::is('admin/perizinan*') ? 'text-emerald-400' : 'text-slate-300 hover:text-white' }}">Layanan Perizinan</a>
+                        
                         @if(Auth::user()->isAdmin())
                             <a href="{{ route('admin.users.index') }}" class="text-sm font-medium transition-colors {{ Route::is('admin.users.*') ? 'text-emerald-400' : 'text-slate-300 hover:text-white' }}">User Management</a>
                         @endif
@@ -98,6 +100,7 @@
             <a href="{{ route('welcome') }}" class="block px-3 py-2 rounded-lg text-base font-semibold {{ Route::is('welcome') ? 'bg-emerald-500/10 text-emerald-400' : 'text-slate-300 hover:bg-slate-900 hover:text-white' }}">Home</a>
             @auth
                 <a href="{{ route('dashboard') }}" class="block px-3 py-2 rounded-lg text-base font-semibold {{ Route::is('dashboard') ? 'bg-emerald-500/10 text-emerald-400' : 'text-slate-300 hover:bg-slate-900 hover:text-white' }}">Dashboard</a>
+                <a href="{{ route('perizinan.index') }}" class="block px-3 py-2 rounded-lg text-base font-semibold {{ Request::is('perizinan*') || Request::is('admin/perizinan*') ? 'bg-emerald-500/10 text-emerald-400' : 'text-slate-300 hover:bg-slate-900 hover:text-white' }}">Layanan Perizinan</a>
                 @if(Auth::user()->isAdmin())
                     <a href="{{ route('admin.users.index') }}" class="block px-3 py-2 rounded-lg text-base font-semibold {{ Route::is('admin.users.*') ? 'bg-emerald-500/10 text-emerald-400' : 'text-slate-300 hover:bg-slate-900 hover:text-white' }}">User Management</a>
                 @endif

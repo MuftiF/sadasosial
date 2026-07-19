@@ -66,6 +66,52 @@ class User extends Authenticatable
     }
 
     /**
+     * Check if the user has a staff role.
+     */
+    public function isStaff(): bool
+    {
+        return in_array($this->role, [
+            'admin',
+            'sekretariat',
+            'verifikator',
+            'dinsos_wilayah',
+            'bidang_pemberdayaan',
+            'bidang_linjamsos',
+            'kadinas'
+        ]);
+    }
+
+    public function isSekretariat(): bool
+    {
+        return $this->role === 'sekretariat';
+    }
+
+    public function isVerifikator(): bool
+    {
+        return $this->role === 'verifikator';
+    }
+
+    public function isDinsosWilayah(): bool
+    {
+        return $this->role === 'dinsos_wilayah';
+    }
+
+    public function isBidangPemberdayaan(): bool
+    {
+        return $this->role === 'bidang_pemberdayaan';
+    }
+
+    public function isBidangLinjamsos(): bool
+    {
+        return $this->role === 'bidang_linjamsos';
+    }
+
+    public function isKadinas(): bool
+    {
+        return $this->role === 'kadinas';
+    }
+
+    /**
      * Check if the user account is a lembaga/organisasi account.
      */
     public function isLembaga(): bool
@@ -125,6 +171,14 @@ class User extends Authenticatable
     public function perizinans()
     {
         return $this->hasMany(Perizinan::class, 'pemohon_id');
+    }
+
+    /**
+     * Get the data validation logs for the user.
+     */
+    public function validationLogs()
+    {
+        return $this->hasMany(DataValidationLog::class, 'user_id');
     }
 
     /**

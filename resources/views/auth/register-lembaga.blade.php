@@ -268,7 +268,7 @@
             <a href="{{ route('login') }}" class="font-semibold text-emerald-400 hover:text-emerald-300 transition-colors">Masuk di sini</a>
             <span class="mx-2 text-slate-700">·</span>
             Daftar sebagai masyarakat?
-            <a href="#" class="font-semibold text-teal-400 hover:text-teal-300 transition-colors">Klik di sini</a>
+            <a href="{{ route('register.masyarakat') }}" class="font-semibold text-teal-400 hover:text-teal-300 transition-colors">Klik di sini</a>
         </p>
     </div>
 </div>

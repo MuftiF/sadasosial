@@ -13,9 +13,28 @@ class Perizinan extends Model
     protected $fillable = [
         'pemohon_id',
         'jenis_layanan',
+        'nomor_izin',
         'status',
+        'tahap_verifikasi',
+        'perlu_perbaikan',
+        'catatan_perbaikan',
+        'data_tambahan',
+        'tanggal_terbit',
+        'tanggal_kadaluarsa',
+        'qr_code_token',
+        'history_status',
+        'konfirmasi_wilayah',
         'catatan',
         'dokumen',
+    ];
+
+    protected $casts = [
+        'data_tambahan' => 'array',
+        'history_status' => 'array',
+        'perlu_perbaikan' => 'boolean',
+        'konfirmasi_wilayah' => 'boolean',
+        'tanggal_terbit' => 'date',
+        'tanggal_kadaluarsa' => 'date',
     ];
 
     public function pemohon()

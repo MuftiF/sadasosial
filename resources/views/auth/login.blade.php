@@ -88,7 +88,7 @@
             </p>
             <p class="text-xs text-slate-600">
                 Atau daftar sebagai
-                <a href="#" class="text-teal-400 hover:text-teal-300 font-medium transition-colors">Masyarakat Perorangan</a>
+                <a href="{{ route('register.masyarakat') }}" class="text-teal-400 hover:text-teal-300 font-medium transition-colors">Masyarakat Perorangan</a>
             </p>
         </div>
     </div>
