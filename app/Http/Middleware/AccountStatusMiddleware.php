@@ -17,8 +17,8 @@ class AccountStatusMiddleware
         if (Auth::check()) {
             $user = Auth::user();
 
-            // Administrators bypass validation status checks
-            if ($user->isAdmin()) {
+            // Staff and administrators bypass validation status checks
+            if ($user->role !== 'user') {
                 return $next($request);
             }
 

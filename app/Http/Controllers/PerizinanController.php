@@ -19,17 +19,20 @@ class PerizinanController extends Controller
     {
         $user = Auth::user();
 
-        // Handle Role Switcher for Developer convenience
-        if ($request->has('switch_role')) {
-            $newRole = $request->switch_role;
-            if (in_array($newRole, ['user', 'admin', 'sekretariat', 'verifikator', 'dinsos_wilayah', 'bidang_pemberdayaan', 'bidang_linjamsos', 'kadinas'])) {
-                $user->update(['role' => $newRole]);
-                return redirect()->route('perizinan.index')->with('success', "Berhasil menyimulasikan peran sebagai: " . strtoupper($newRole));
-            }
-        }
-
-        // If the user has a staff role, we can also show a quick link to their review queue
         if ($user->isStaff()) {
+            if ($user->role === 'sekretariat') {
+                return redirect()->route('admin.sekretariat');
+            } elseif ($user->role === 'verifikator') {
+                return redirect()->route('admin.verifikator');
+            } elseif ($user->role === 'dinsos_wilayah') {
+                return redirect()->route('admin.wilayah');
+            } elseif ($user->role === 'bidang_pemberdayaan') {
+                return redirect()->route('admin.pemberdayaan');
+            } elseif ($user->role === 'bidang_linjamsos') {
+                return redirect()->route('admin.linjamsos');
+            } elseif ($user->role === 'kadinas') {
+                return redirect()->route('admin.kadinas');
+            }
             return $this->adminIndex($request);
         }
 
@@ -43,6 +46,9 @@ class PerizinanController extends Controller
      */
     public function create()
     {
+        if (Auth::user()->isStaff()) {
+            abort(403, 'Petugas tidak diperbolehkan mengajukan permohonan baru.');
+        }
         return view('perizinan.create');
     }
 
@@ -51,6 +57,9 @@ class PerizinanController extends Controller
      */
     public function form($jenis)
     {
+        if (Auth::user()->isStaff()) {
+            abort(403, 'Petugas tidak diperbolehkan mengajukan permohonan baru.');
+        }
         if (!in_array($jenis, ['ugb', 'pub', 'lks', 'adopsi'])) {
             return redirect()->route('perizinan.create')->with('error', 'Jenis layanan tidak valid.');
         }
@@ -63,6 +72,9 @@ class PerizinanController extends Controller
      */
     public function store(Request $request, $jenis)
     {
+        if (Auth::user()->isStaff()) {
+            abort(403, 'Petugas tidak diperbolehkan mengajukan permohonan baru.');
+        }
         if (!in_array($jenis, ['ugb', 'pub', 'lks', 'adopsi'])) {
             return redirect()->route('perizinan.create')->with('error', 'Jenis layanan tidak valid.');
         }
@@ -80,8 +92,8 @@ class PerizinanController extends Controller
                 'total_hadiah' => 'required|numeric|min:0',
                 'waktu_pelaksanaan' => 'required|string|max:255',
                 'deskripsi_kegiatan' => 'required|string',
-                'dokumen_proposal' => 'nullable|file|mimes:pdf,docx,jpg,png|max:5120',
-                'dokumen_hadiah' => 'nullable|file|mimes:pdf,docx,jpg,png|max:5120',
+                'dokumen_proposal' => 'required|file|mimes:pdf,docx,jpg,png|max:5120',
+                'dokumen_hadiah' => 'required|file|mimes:pdf,docx,jpg,png|max:5120',
             ];
         } elseif ($jenis === 'pub') {
             $rules += [
@@ -91,8 +103,8 @@ class PerizinanController extends Controller
                 'target_dana' => 'required|numeric|min:0',
                 'wilayah_pengumpulan' => 'required|string|max:255',
                 'waktu_pelaksanaan' => 'required|string|max:255',
-                'dokumen_proposal' => 'nullable|file|mimes:pdf,docx,jpg,png|max:5120',
-                'dokumen_rekening' => 'nullable|file|mimes:pdf,jpg,png|max:5120',
+                'dokumen_proposal' => 'required|file|mimes:pdf,docx,jpg,png|max:5120',
+                'dokumen_rekening' => 'required|file|mimes:pdf,jpg,png|max:5120',
             ];
         } elseif ($jenis === 'lks') {
             $rules += [
@@ -101,8 +113,8 @@ class PerizinanController extends Controller
                 'alamat_lks' => 'required|string',
                 'nama_pimpinan' => 'required|string|max:255',
                 'jumlah_binaan' => 'required|integer|min:0',
-                'dokumen_akta' => 'nullable|file|mimes:pdf|max:5120',
-                'dokumen_domisili' => 'nullable|file|mimes:pdf,jpg,png|max:5120',
+                'dokumen_akta' => 'required|file|mimes:pdf|max:5120',
+                'dokumen_domisili' => 'required|file|mimes:pdf,jpg,png|max:5120',
             ];
         } elseif ($jenis === 'adopsi') {
             $rules += [
@@ -115,8 +127,8 @@ class PerizinanController extends Controller
                 'penghasilan' => 'required|numeric|min:0',
                 'nama_anak' => 'required|string|max:255',
                 'alasan_adopsi' => 'required|string',
-                'dokumen_nikah' => 'nullable|file|mimes:pdf,jpg,png|max:5120',
-                'dokumen_sehat' => 'nullable|file|mimes:pdf|max:5120',
+                'dokumen_nikah' => 'required|file|mimes:pdf,jpg,png|max:5120',
+                'dokumen_sehat' => 'required|file|mimes:pdf|max:5120',
             ];
         }
 
@@ -397,13 +409,23 @@ class PerizinanController extends Controller
 
         $queues = $query->with('pemohon')->latest()->get();
 
+        // Fetch reports queue for Bidang Pemberdayaan or Admin
+        $reportQueues = [];
+        if ($user->isBidangPemberdayaan() || $user->isAdmin()) {
+            $reportQueues = Perizinan::where('jenis_layanan', 'ugb')
+                ->where('laporan_status', 'diperiksa')
+                ->with('pemohon')
+                ->latest()
+                ->get();
+        }
+
         // Also fetch all other logs for administrative display
         $allApplications = [];
         if ($user->isAdmin()) {
             $allApplications = Perizinan::with('pemohon')->latest()->get();
         }
 
-        return view('perizinan.admin_index', compact('user', 'queues', 'allApplications'));
+        return view('perizinan.admin_index', compact('user', 'queues', 'reportQueues', 'allApplications'));
     }
 
     /**
@@ -528,6 +550,9 @@ class PerizinanController extends Controller
         // Add history log
         $history = $perizinan->history_status ?? [];
         $history[] = $historyLog;
+
+        // Save any directly-assigned properties first (e.g. nomor_izin, tanggal_terbit, data_tambahan)
+        $perizinan->save();
 
         $perizinan->update([
             'status' => $status,
@@ -699,6 +724,259 @@ class PerizinanController extends Controller
         ];
 
         return view('perizinan.cetak', compact('perizinan', 'jenisLabels'));
+    }
+
+    /**
+     * Show interactive UGB SOP guide.
+     */
+    public function sopUgb()
+    {
+        return view('perizinan.sop_ugb');
+    }
+
+    /**
+     * Show form for submitting UGB execution report.
+     */
+    public function showLaporanForm($id)
+    {
+        $perizinan = Perizinan::findOrFail($id);
+        $user = Auth::user();
+
+        if ($perizinan->pemohon_id !== $user->id) {
+            abort(403, 'Akses tidak sah.');
+        }
+
+        if ($perizinan->status !== 'selesai' || $perizinan->jenis_layanan !== 'ugb') {
+            abort(400, 'Layanan pelaporan hanya tersedia untuk UGB yang telah terbit izin.');
+        }
+
+        if ($perizinan->laporan_status === 'disetujui') {
+            return redirect()->route('perizinan.show', $perizinan->id)->with('error', 'Laporan sudah disetujui dan tidak dapat diubah.');
+        }
+
+        if ($perizinan->laporan_status === 'diperiksa') {
+            return redirect()->route('perizinan.show', $perizinan->id)->with('error', 'Laporan sedang ditinjau oleh petugas. Harap tunggu hasil keputusan.');
+        }
+
+        $laporanData = $perizinan->laporan_data ?? [];
+
+        return view('perizinan.laporan_form', compact('perizinan', 'laporanData'));
+    }
+
+    /**
+     * Submit UGB execution report.
+     */
+    public function submitLaporan(Request $request, $id)
+    {
+        $perizinan = Perizinan::findOrFail($id);
+        $user = Auth::user();
+
+        if ($perizinan->pemohon_id !== $user->id) {
+            abort(403, 'Akses tidak sah.');
+        }
+
+        if ($perizinan->status !== 'selesai' || $perizinan->jenis_layanan !== 'ugb') {
+            abort(400, 'Aksi tidak valid.');
+        }
+
+        if ($perizinan->laporan_status === 'disetujui') {
+            return redirect()->route('perizinan.show', $perizinan->id)->with('error', 'Laporan sudah disetujui dan tidak dapat diubah.');
+        }
+
+        if ($perizinan->laporan_status === 'diperiksa') {
+            return redirect()->route('perizinan.show', $perizinan->id)->with('error', 'Laporan sedang dalam proses peninjauan. Tunggu keputusan petugas.');
+        }
+
+        $request->validate([
+            'dokumen_laporan' => 'required_without:existing_dokumen_laporan|file|mimes:pdf,docx|max:5120',
+            'daftar_pemenang' => 'required_without:existing_daftar_pemenang|file|mimes:pdf,xlsx,xls|max:5120',
+            'dokumentasi_kegiatan' => 'required_without:existing_dokumentasi_kegiatan|file|mimes:pdf,jpg,jpeg,png,zip|max:5120',
+            'catatan_pelaksanaan' => 'required|string',
+        ]);
+
+        $laporanData = $perizinan->laporan_data ?? [];
+        $laporanData['catatan_pelaksanaan'] = $request->catatan_pelaksanaan;
+
+        if ($request->hasFile('dokumen_laporan')) {
+            if (isset($laporanData['dokumen_laporan'])) {
+                Storage::disk('public')->delete($laporanData['dokumen_laporan']);
+            }
+            $laporanData['dokumen_laporan'] = $request->file('dokumen_laporan')->store('laporan_ugb', 'public');
+        }
+        if ($request->hasFile('daftar_pemenang')) {
+            if (isset($laporanData['daftar_pemenang'])) {
+                Storage::disk('public')->delete($laporanData['daftar_pemenang']);
+            }
+            $laporanData['daftar_pemenang'] = $request->file('daftar_pemenang')->store('laporan_ugb', 'public');
+        }
+        if ($request->hasFile('dokumentasi_kegiatan')) {
+            if (isset($laporanData['dokumentasi_kegiatan'])) {
+                Storage::disk('public')->delete($laporanData['dokumentasi_kegiatan']);
+            }
+            $laporanData['dokumentasi_kegiatan'] = $request->file('dokumentasi_kegiatan')->store('laporan_ugb', 'public');
+        }
+
+        $history = $perizinan->history_status ?? [];
+        $history[] = [
+            'tahap' => 'Pengajuan Laporan',
+            'oleh' => $user->name,
+            'role' => 'Pemohon',
+            'status' => 'diperiksa',
+            'catatan' => 'Laporan pelaksanaan UGB berhasil dikirim untuk ditinjau.',
+            'waktu' => now()->format('Y-m-d H:i:s'),
+        ];
+
+        $perizinan->update([
+            'laporan_status' => 'diperiksa',
+            'laporan_submitted_at' => now(),
+            'laporan_data' => $laporanData,
+            'laporan_catatan' => null,
+            'history_status' => $history,
+        ]);
+
+        return redirect()->route('perizinan.show', $perizinan->id)->with('success', 'Laporan UGB berhasil dikirim.');
+    }
+
+    /**
+     * Process UGB execution report by officer.
+     */
+    public function processLaporan(Request $request, $id)
+    {
+        $perizinan = Perizinan::findOrFail($id);
+        $user = Auth::user();
+
+        if (!$user->isStaff() || (!$user->isBidangPemberdayaan() && !$user->isAdmin())) {
+            abort(403, 'Akses tidak sah.');
+        }
+
+        if ($perizinan->jenis_layanan !== 'ugb' || $perizinan->laporan_status !== 'diperiksa') {
+            abort(400, 'Status laporan tidak valid untuk diproses.');
+        }
+
+        $validated = $request->validate([
+            'action' => 'required|in:approve,perbaikan',
+            'catatan' => 'required|string|max:1000',
+        ]);
+
+        $action = $validated['action'];
+        $catatan = $validated['catatan'];
+
+        $historyLog = [
+            'tahap' => 'Verifikasi Laporan UGB',
+            'oleh' => $user->name,
+            'role' => $this->getRoleLabel($user->role),
+            'waktu' => now()->format('Y-m-d H:i:s'),
+        ];
+
+        if ($action === 'perbaikan') {
+            $laporanStatus = 'perlu_perbaikan';
+            $historyLog['status'] = 'Perlu Perbaikan';
+            $historyLog['catatan'] = 'Laporan UGB dikembalikan untuk diperbaiki. Catatan: ' . $catatan;
+        } else {
+            $laporanStatus = 'disetujui';
+            $historyLog['status'] = 'Disetujui';
+            $historyLog['catatan'] = 'Laporan UGB dinyatakan lengkap dan disetujui. Catatan: ' . $catatan;
+        }
+
+        $history = $perizinan->history_status ?? [];
+        $history[] = $historyLog;
+
+        $perizinan->update([
+            'laporan_status' => $laporanStatus,
+            'laporan_catatan' => $catatan,
+            'history_status' => $history,
+        ]);
+
+        AccessAuditLog::create([
+            'admin_id' => $user->id,
+            'target_user_id' => $perizinan->pemohon_id,
+            'action' => 'review_laporan_ugb',
+            'details' => "Petugas {$user->name} memproses Laporan UGB ID #{$perizinan->id} dengan keputusan " . strtoupper($action) . ".",
+            'ip_address' => $request->ip(),
+            'user_agent' => $request->userAgent(),
+        ]);
+
+        $msg = $action === 'approve' ? 'Laporan UGB berhasil disetujui.' : 'Laporan UGB dikembalikan untuk perbaikan.';
+        return redirect()->route('perizinan.show', $perizinan->id)->with('success', $msg);
+    }
+
+    /**
+     * Dedicated dashboard for Sekretariat.
+     */
+    public function sekretariatDashboard()
+    {
+        $user = Auth::user();
+        if ($user->role !== 'sekretariat' && !$user->isAdmin()) {
+            abort(403, 'Akses tidak sah untuk peran Anda.');
+        }
+        $queues = Perizinan::where('tahap_verifikasi', 'sekretariat')->where('status', 'diperiksa')->with('pemohon')->latest()->get();
+        return view('admin.sekretariat', compact('user', 'queues'));
+    }
+
+    /**
+     * Dedicated dashboard for Verifikator.
+     */
+    public function verifikatorDashboard()
+    {
+        $user = Auth::user();
+        if ($user->role !== 'verifikator' && !$user->isAdmin()) {
+            abort(403, 'Akses tidak sah untuk peran Anda.');
+        }
+        $queues = Perizinan::where('tahap_verifikasi', 'verifikator')->where('status', 'diperiksa')->with('pemohon')->latest()->get();
+        return view('admin.verifikator', compact('user', 'queues'));
+    }
+
+    /**
+     * Dedicated dashboard for Dinsos Wilayah.
+     */
+    public function wilayahDashboard()
+    {
+        $user = Auth::user();
+        if ($user->role !== 'dinsos_wilayah' && !$user->isAdmin()) {
+            abort(403, 'Akses tidak sah untuk peran Anda.');
+        }
+        $queues = Perizinan::where('tahap_verifikasi', 'dinsos_wilayah')->where('status', 'diperiksa')->with('pemohon')->latest()->get();
+        return view('admin.wilayah', compact('user', 'queues'));
+    }
+
+    /**
+     * Dedicated dashboard for Bidang Pemberdayaan.
+     */
+    public function pemberdayaanDashboard()
+    {
+        $user = Auth::user();
+        if ($user->role !== 'bidang_pemberdayaan' && !$user->isAdmin()) {
+            abort(403, 'Akses tidak sah untuk peran Anda.');
+        }
+        $queues = Perizinan::where('tahap_verifikasi', 'bidang_teknis')->whereIn('jenis_layanan', ['ugb', 'pub', 'lks'])->where('status', 'diperiksa')->with('pemohon')->latest()->get();
+        $reportQueues = Perizinan::where('jenis_layanan', 'ugb')->where('laporan_status', 'diperiksa')->with('pemohon')->latest()->get();
+        return view('admin.pemberdayaan', compact('user', 'queues', 'reportQueues'));
+    }
+
+    /**
+     * Dedicated dashboard for Bidang Linjamsos.
+     */
+    public function linjamsosDashboard()
+    {
+        $user = Auth::user();
+        if ($user->role !== 'bidang_linjamsos' && !$user->isAdmin()) {
+            abort(403, 'Akses tidak sah untuk peran Anda.');
+        }
+        $queues = Perizinan::where('tahap_verifikasi', 'bidang_teknis')->where('jenis_layanan', 'adopsi')->where('status', 'diperiksa')->with('pemohon')->latest()->get();
+        return view('admin.linjamsos', compact('user', 'queues'));
+    }
+
+    /**
+     * Dedicated dashboard for Kepala Dinas.
+     */
+    public function kadinasDashboard()
+    {
+        $user = Auth::user();
+        if ($user->role !== 'kadinas' && !$user->isAdmin()) {
+            abort(403, 'Akses tidak sah untuk peran Anda.');
+        }
+        $queues = Perizinan::where('tahap_verifikasi', 'kepala_dinas')->where('status', 'diperiksa')->with('pemohon')->latest()->get();
+        return view('admin.kadinas', compact('user', 'queues'));
     }
 
     /**

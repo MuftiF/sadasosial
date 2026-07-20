@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id" class="h-full bg-slate-950 text-slate-100 selection:bg-emerald-500 selection:text-slate-900">
+<html lang="id" class="h-full bg-slate-50 text-slate-900 selection:bg-emerald-500 selection:text-white">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -16,18 +16,77 @@
     <style>
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #f8fafc !important;
+            color: #0f172a !important;
+        }
+        .text-white {
+            color: #0f172a !important;
+        }
+        .text-slate-100, .text-slate-200, .text-slate-300, .text-slate-350 {
+            color: #1e293b !important;
+        }
+        .text-slate-400, .text-slate-500 {
+            color: #475569 !important;
+        }
+        .bg-slate-950, .bg-slate-950\/40, .bg-slate-950\/60, .bg-slate-900, .bg-slate-900\/30, .bg-slate-900\/40 {
+            background-color: #f1f5f9 !important;
+        }
+        .border-slate-800, .border-slate-900 {
+            border-color: #e2e8f0 !important;
         }
         .glass-panel {
-            background: rgba(15, 23, 42, 0.65);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: #ffffff !important;
+            border: 1px solid #e2e8f0 !important;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03) !important;
+            color: #1e293b !important;
         }
         .glow-emerald {
-            box-shadow: 0 0 40px -5px rgba(16, 185, 129, 0.2);
+            box-shadow: 0 10px 30px -5px rgba(16, 185, 129, 0.08) !important;
         }
         .glow-indigo {
-            box-shadow: 0 0 40px -5px rgba(99, 102, 241, 0.2);
+            box-shadow: 0 10px 30px -5px rgba(99, 102, 241, 0.08) !important;
+        }
+        /* Nav bar colors override */
+        header {
+            background-color: rgba(255, 255, 255, 0.9) !important;
+            border-bottom: 1px solid #e2e8f0 !important;
+        }
+        header a, header button, header span {
+            color: #1e293b !important;
+        }
+        header a:hover {
+            color: #10b981 !important;
+        }
+        /* Input & select elements light theme override */
+        input[type="text"], input[type="email"], input[type="password"], input[type="number"], input[type="file"], select, textarea {
+            background-color: #ffffff !important;
+            border: 1px solid #cbd5e1 !important;
+            color: #0f172a !important;
+        }
+        input:focus, select:focus, textarea:focus {
+            border-color: #10b981 !important;
+            outline: none !important;
+            box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.1) !important;
+        }
+        /* Tables light theme override */
+        table thead {
+            background-color: #f1f5f9 !important;
+        }
+        table thead th {
+            color: #475569 !important;
+        }
+        table tbody tr:hover {
+            background-color: #f8fafc !important;
+        }
+        table td {
+            color: #1e293b !important;
+            border-bottom: 1px solid #e2e8f0 !important;
+        }
+        /* Footer light theme override */
+        footer {
+            background-color: #ffffff !important;
+            border-top: 1px solid #e2e8f0 !important;
+            color: #64748b !important;
         }
     </style>
     @yield('styles')

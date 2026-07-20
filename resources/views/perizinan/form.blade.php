@@ -32,6 +32,20 @@
             @if($jenis === 'ugb')
                 <!-- ================== UGB FIELDS ================== -->
                 <div class="space-y-6">
+                    <!-- Info Banner SOP -->
+                    <div class="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 flex items-start justify-between gap-4">
+                        <div class="flex gap-3">
+                            <span class="text-lg">📋</span>
+                            <div>
+                                <h4 class="text-xs font-bold text-slate-900">Panduan Prosedur Pelaksanaan UGB</h4>
+                                <p class="text-[11px] text-slate-500 mt-0.5">Pastikan Anda memahami tahapan penyegelan alat & saksi yang diwajibkan setelah izin terbit.</p>
+                            </div>
+                        </div>
+                        <a href="{{ route('perizinan.sop.ugb') }}" target="_blank" class="shrink-0 px-3 py-1.5 text-[10px] font-bold text-emerald-650 bg-white hover:bg-slate-50 rounded-xl border border-emerald-200/60 transition duration-200">
+                            Lihat Alur SOP &rarr;
+                        </a>
+                    </div>
+
                     <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
                         <div class="space-y-1.5">
                             <label for="nama_penyelenggara" class="block text-xs font-bold text-slate-300 uppercase tracking-wide">Nama Penyelenggara / Perusahaan</label>
@@ -71,13 +85,13 @@
 
                     <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 border-t border-slate-900 pt-6">
                         <div class="space-y-1.5">
-                            <label for="dokumen_proposal" class="block text-xs font-bold text-slate-300 uppercase tracking-wide">Proposal Kegiatan (PDF)</label>
-                            <input type="file" id="dokumen_proposal" name="dokumen_proposal"
+                            <label for="dokumen_proposal" class="block text-xs font-bold text-slate-300 uppercase tracking-wide">Proposal Kegiatan (PDF) <span class="text-rose-500">*</span></label>
+                            <input type="file" id="dokumen_proposal" name="dokumen_proposal" required
                                 class="block w-full text-xs text-slate-400 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-slate-900 file:text-slate-200 hover:file:bg-slate-800 cursor-pointer">
                         </div>
                         <div class="space-y-1.5">
-                            <label for="dokumen_hadiah" class="block text-xs font-bold text-slate-300 uppercase tracking-wide">Daftar Rincian Hadiah (PDF/Docx)</label>
-                            <input type="file" id="dokumen_hadiah" name="dokumen_hadiah"
+                            <label for="dokumen_hadiah" class="block text-xs font-bold text-slate-300 uppercase tracking-wide">Daftar Rincian Hadiah (PDF/Docx) <span class="text-rose-500">*</span></label>
+                            <input type="file" id="dokumen_hadiah" name="dokumen_hadiah" required
                                 class="block w-full text-xs text-slate-400 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-slate-900 file:text-slate-200 hover:file:bg-slate-800 cursor-pointer">
                         </div>
                     </div>
@@ -133,13 +147,13 @@
 
                     <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 border-t border-slate-900 pt-6">
                         <div class="space-y-1.5">
-                            <label for="dokumen_proposal" class="block text-xs font-bold text-slate-300 uppercase tracking-wide">Proposal Program PUB (PDF)</label>
-                            <input type="file" id="dokumen_proposal" name="dokumen_proposal"
+                            <label for="dokumen_proposal" class="block text-xs font-bold text-slate-300 uppercase tracking-wide">Proposal Program PUB (PDF) <span class="text-rose-500">*</span></label>
+                            <input type="file" id="dokumen_proposal" name="dokumen_proposal" required
                                 class="block w-full text-xs text-slate-400 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-slate-900 file:text-slate-200 hover:file:bg-slate-800 cursor-pointer">
                         </div>
                         <div class="space-y-1.5">
-                            <label for="dokumen_rekening" class="block text-xs font-bold text-slate-300 uppercase tracking-wide">Buku Tabungan / Rekening Lembaga (PDF/Gambar)</label>
-                            <input type="file" id="dokumen_rekening" name="dokumen_rekening"
+                            <label for="dokumen_rekening" class="block text-xs font-bold text-slate-300 uppercase tracking-wide">Buku Tabungan / Rekening Lembaga (PDF/Gambar) <span class="text-rose-500">*</span></label>
+                            <input type="file" id="dokumen_rekening" name="dokumen_rekening" required
                                 class="block w-full text-xs text-slate-400 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-slate-900 file:text-slate-200 hover:file:bg-slate-800 cursor-pointer">
                         </div>
                     </div>
@@ -187,13 +201,13 @@
 
                     <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 border-t border-slate-900 pt-6">
                         <div class="space-y-1.5">
-                            <label for="dokumen_akta" class="block text-xs font-bold text-slate-300 uppercase tracking-wide">Akta Notaris & AD/ART LKS (PDF)</label>
-                            <input type="file" id="dokumen_akta" name="dokumen_akta"
+                            <label for="dokumen_akta" class="block text-xs font-bold text-slate-300 uppercase tracking-wide">Akta Notaris & AD/ART LKS (PDF) <span class="text-rose-500">*</span></label>
+                            <input type="file" id="dokumen_akta" name="dokumen_akta" required
                                 class="block w-full text-xs text-slate-400 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-slate-900 file:text-slate-200 hover:file:bg-slate-800 cursor-pointer">
                         </div>
                         <div class="space-y-1.5">
-                            <label for="dokumen_domisili" class="block text-xs font-bold text-slate-300 uppercase tracking-wide">Surat Domisili Kelurahan LKS (PDF/Gambar)</label>
-                            <input type="file" id="dokumen_domisili" name="dokumen_domisili"
+                            <label for="dokumen_domisili" class="block text-xs font-bold text-slate-300 uppercase tracking-wide">Surat Domisili Kelurahan LKS (PDF/Gambar) <span class="text-rose-500">*</span></label>
+                            <input type="file" id="dokumen_domisili" name="dokumen_domisili" required
                                 class="block w-full text-xs text-slate-400 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-slate-900 file:text-slate-200 hover:file:bg-slate-800 cursor-pointer">
                         </div>
                     </div>
@@ -280,13 +294,13 @@
 
                     <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 border-t border-slate-900 pt-6">
                         <div class="space-y-1.5">
-                            <label for="dokumen_nikah" class="block text-xs font-bold text-slate-300 uppercase tracking-wide">Akta Pernikahan Orang Tua (PDF/Gambar)</label>
-                            <input type="file" id="dokumen_nikah" name="dokumen_nikah"
+                            <label for="dokumen_nikah" class="block text-xs font-bold text-slate-300 uppercase tracking-wide">Akta Pernikahan Orang Tua (PDF/Gambar) <span class="text-rose-500">*</span></label>
+                            <input type="file" id="dokumen_nikah" name="dokumen_nikah" required
                                 class="block w-full text-xs text-slate-400 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-slate-900 file:text-slate-200 hover:file:bg-slate-800 cursor-pointer">
                         </div>
                         <div class="space-y-1.5">
-                            <label for="dokumen_sehat" class="block text-xs font-bold text-slate-300 uppercase tracking-wide">Surat Sehat Jasmani & Rohani (PDF)</label>
-                            <input type="file" id="dokumen_sehat" name="dokumen_sehat"
+                            <label for="dokumen_sehat" class="block text-xs font-bold text-slate-300 uppercase tracking-wide">Surat Sehat Jasmani & Rohani (PDF) <span class="text-rose-500">*</span></label>
+                            <input type="file" id="dokumen_sehat" name="dokumen_sehat" required
                                 class="block w-full text-xs text-slate-400 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-slate-900 file:text-slate-200 hover:file:bg-slate-800 cursor-pointer">
                         </div>
                     </div>

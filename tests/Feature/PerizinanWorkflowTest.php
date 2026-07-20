@@ -137,4 +137,83 @@ class PerizinanWorkflowTest extends TestCase
         $publicResponse->assertStatus(200);
         $publicResponse->assertSee($perizinan->nomor_izin);
     }
+
+    /**
+     * Test UGB execution report submission and approval flow.
+     */
+    public function test_ugb_reporting_flow(): void
+    {
+        \Illuminate\Support\Facades\Storage::fake('public');
+
+        $pemohon = User::factory()->create(['name' => 'PT. Test Undian', 'role' => 'user', 'validation_status' => 'validated']);
+        
+        // Create an approved UGB perizinan
+        $perizinan = Perizinan::create([
+            'pemohon_id' => $pemohon->id,
+            'jenis_layanan' => 'ugb',
+            'status' => 'selesai',
+            'tahap_verifikasi' => 'selesai',
+            'nomor_izin' => '503/UGB/2026/0001',
+            'tanggal_terbit' => now(),
+            'tanggal_kadaluarsa' => now()->addMonths(3),
+            'qr_code_token' => 'ugbtesttoken123',
+            'data_tambahan' => [
+                'nama_penyelenggara' => 'PT. Test Undian',
+                'nama_undian' => 'Undian Berhadiah',
+            ],
+            'history_status' => [],
+        ]);
+
+        // 1. Pemohon views the UGB report submission form
+        $response = $this->actingAs($pemohon)->get("/perizinan/{$perizinan->id}/laporan");
+        $response->assertStatus(200);
+        $response->assertSee('Laporan Pelaksanaan UGB');
+
+        // 2. Pemohon submits the report with required documents
+        $response = $this->actingAs($pemohon)->post("/perizinan/{$perizinan->id}/laporan", [
+            'dokumen_laporan' => \Illuminate\Http\UploadedFile::fake()->create('laporan.pdf', 100),
+            'daftar_pemenang' => \Illuminate\Http\UploadedFile::fake()->create('pemenang.xlsx', 100),
+            'dokumentasi_kegiatan' => \Illuminate\Http\UploadedFile::fake()->create('dokumentasi.zip', 500),
+            'catatan_pelaksanaan' => 'Draw completed with saksi, notary, and local police present.',
+        ]);
+
+        $response->assertRedirect("/perizinan/{$perizinan->id}");
+        $this->assertDatabaseHas('perizinans', [
+            'id' => $perizinan->id,
+            'laporan_status' => 'diperiksa',
+        ]);
+
+        // 3. Bidang Pemberdayaan Sosial checks the dashboard queue
+        $bidang = User::factory()->create(['role' => 'bidang_pemberdayaan']);
+        $response = $this->actingAs($bidang)->get("/admin/pemberdayaan");
+        $response->assertStatus(200);
+        $response->assertSee('Antrean Laporan Pelaksanaan UGB');
+        $response->assertSee('PT. Test Undian');
+
+        // 4. Bidang Pemberdayaan Sosial approves the report
+        $response = $this->actingAs($bidang)->post("/admin/perizinan/{$perizinan->id}/laporan/proses", [
+            'action' => 'approve',
+            'catatan' => 'Laporan lengkap dan valid sesuai Berita Acara.',
+        ]);
+
+        $response->assertRedirect("/perizinan/{$perizinan->id}");
+        
+        $perizinan->refresh();
+        $this->assertEquals('disetujui', $perizinan->laporan_status);
+        $this->assertEquals('Laporan lengkap dan valid sesuai Berita Acara.', $perizinan->laporan_catatan);
+    }
+
+    /**
+     * Authenticated user can view the UGB SOP page.
+     */
+    public function test_user_can_view_ugb_sop(): void
+    {
+        $user = User::factory()->create(['role' => 'user']);
+
+        $response = $this->actingAs($user)->get('/perizinan/sop/ugb');
+        $response->assertStatus(200);
+        $response->assertSee('SOP Penyelenggaraan UGB');
+        $response->assertSee('SOP Pelaksanaan Pengundian');
+        $response->assertSee('SOP Patroli Pengawasan');
+    }
 }

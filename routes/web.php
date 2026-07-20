@@ -43,11 +43,14 @@ Route::middleware('auth')->group(function () {
         // Perizinan Routes (Pemohon)
         Route::get('/perizinan', [\App\Http\Controllers\PerizinanController::class, 'index'])->name('perizinan.index');
         Route::get('/perizinan/buat', [\App\Http\Controllers\PerizinanController::class, 'create'])->name('perizinan.create');
+        Route::get('/perizinan/sop/ugb', [\App\Http\Controllers\PerizinanController::class, 'sopUgb'])->name('perizinan.sop.ugb');
         Route::get('/perizinan/buat/{jenis}', [\App\Http\Controllers\PerizinanController::class, 'form'])->name('perizinan.form');
         Route::post('/perizinan/buat/{jenis}', [\App\Http\Controllers\PerizinanController::class, 'store'])->name('perizinan.store');
         Route::get('/perizinan/{perizinan}', [\App\Http\Controllers\PerizinanController::class, 'show'])->name('perizinan.show');
         Route::get('/perizinan/{perizinan}/edit', [\App\Http\Controllers\PerizinanController::class, 'edit'])->name('perizinan.edit');
         Route::put('/perizinan/{perizinan}/edit', [\App\Http\Controllers\PerizinanController::class, 'update'])->name('perizinan.update');
+        Route::get('/perizinan/{perizinan}/laporan', [\App\Http\Controllers\PerizinanController::class, 'showLaporanForm'])->name('perizinan.laporan.form');
+        Route::post('/perizinan/{perizinan}/laporan', [\App\Http\Controllers\PerizinanController::class, 'submitLaporan'])->name('perizinan.laporan.submit');
     });
 
     // 4. User Management Page (Protected + Admin Role required)
@@ -70,6 +73,15 @@ Route::middleware('auth')->group(function () {
         Route::get('/perizinan/monitoring', [\App\Http\Controllers\PerizinanController::class, 'monitoring'])->name('perizinan.monitoring');
         Route::post('/perizinan/monitoring/{id}/alert', [\App\Http\Controllers\PerizinanController::class, 'sendExpiryAlert'])->name('perizinan.send_alert');
         Route::post('/perizinan/{perizinan}/proses', [\App\Http\Controllers\PerizinanController::class, 'process'])->name('perizinan.process');
+        Route::post('/perizinan/{perizinan}/laporan/proses', [\App\Http\Controllers\PerizinanController::class, 'processLaporan'])->name('perizinan.laporan.process');
+        
+        // Dedicated Role Dashboards
+        Route::get('/sekretariat', [\App\Http\Controllers\PerizinanController::class, 'sekretariatDashboard'])->name('sekretariat');
+        Route::get('/verifikator', [\App\Http\Controllers\PerizinanController::class, 'verifikatorDashboard'])->name('verifikator');
+        Route::get('/wilayah', [\App\Http\Controllers\PerizinanController::class, 'wilayahDashboard'])->name('wilayah');
+        Route::get('/pemberdayaan', [\App\Http\Controllers\PerizinanController::class, 'pemberdayaanDashboard'])->name('pemberdayaan');
+        Route::get('/linjamsos', [\App\Http\Controllers\PerizinanController::class, 'linjamsosDashboard'])->name('linjamsos');
+        Route::get('/kadinas', [\App\Http\Controllers\PerizinanController::class, 'kadinasDashboard'])->name('kadinas');
     });
 });
 

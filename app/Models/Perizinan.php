@@ -26,6 +26,10 @@ class Perizinan extends Model
         'konfirmasi_wilayah',
         'catatan',
         'dokumen',
+        'laporan_status',
+        'laporan_submitted_at',
+        'laporan_data',
+        'laporan_catatan',
     ];
 
     protected $casts = [
@@ -35,6 +39,8 @@ class Perizinan extends Model
         'konfirmasi_wilayah' => 'boolean',
         'tanggal_terbit' => 'date',
         'tanggal_kadaluarsa' => 'date',
+        'laporan_data' => 'array',
+        'laporan_submitted_at' => 'datetime',
     ];
 
     public function pemohon()

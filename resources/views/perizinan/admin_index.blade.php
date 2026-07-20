@@ -5,27 +5,6 @@
 @section('content')
 <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10">
 
-    <!-- Developer Role Simulator Banner -->
-    <div class="mb-8 p-4 rounded-2xl border border-indigo-500/20 bg-slate-900/40 backdrop-blur-md flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-        <div class="flex items-center gap-3">
-            <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-500/20 text-indigo-400 font-extrabold text-sm">
-                ⚙️
-            </span>
-            <div>
-                <h4 class="text-sm font-bold text-slate-200 uppercase tracking-wider">Simulator Peran (Developer Mode)</h4>
-                <p class="text-xs text-slate-400 mt-0.5">Ubah peran Anda secara instan untuk mensimulasikan alur verifikasi perizinan multi-tahap.</p>
-            </div>
-        </div>
-        <div class="flex flex-wrap gap-2">
-            <a href="?switch_role=user" class="px-3 py-1.5 rounded-lg text-xs font-bold transition {{ $user->role === 'user' ? 'bg-indigo-600 text-white' : 'bg-slate-950 text-slate-400 hover:text-white border border-slate-800' }}">Pemohon</a>
-            <a href="?switch_role=sekretariat" class="px-3 py-1.5 rounded-lg text-xs font-bold transition {{ $user->role === 'sekretariat' ? 'bg-indigo-600 text-white' : 'bg-slate-950 text-slate-400 hover:text-white border border-slate-800' }}">Sekretariat</a>
-            <a href="?switch_role=verifikator" class="px-3 py-1.5 rounded-lg text-xs font-bold transition {{ $user->role === 'verifikator' ? 'bg-indigo-600 text-white' : 'bg-slate-950 text-slate-400 hover:text-white border border-slate-800' }}">Verifikator</a>
-            <a href="?switch_role=dinsos_wilayah" class="px-3 py-1.5 rounded-lg text-xs font-bold transition {{ $user->role === 'dinsos_wilayah' ? 'bg-indigo-600 text-white' : 'bg-slate-950 text-slate-400 hover:text-white border border-slate-800' }}">Dinsos Kab/Kota</a>
-            <a href="?switch_role=bidang_pemberdayaan" class="px-3 py-1.5 rounded-lg text-xs font-bold transition {{ $user->role === 'bidang_pemberdayaan' ? 'bg-indigo-600 text-white' : 'bg-slate-950 text-slate-400 hover:text-white border border-slate-800' }}">Bidang Pemberdayaan</a>
-            <a href="?switch_role=bidang_linjamsos" class="px-3 py-1.5 rounded-lg text-xs font-bold transition {{ $user->role === 'bidang_linjamsos' ? 'bg-indigo-600 text-white' : 'bg-slate-950 text-slate-400 hover:text-white border border-slate-800' }}">Bidang Linjamsos</a>
-            <a href="?switch_role=kadinas" class="px-3 py-1.5 rounded-lg text-xs font-bold transition {{ $user->role === 'kadinas' ? 'bg-indigo-600 text-white' : 'bg-slate-950 text-slate-400 hover:text-white border border-slate-800' }}">Kepala Dinas</a>
-        </div>
-    </div>
 
     <!-- Header Section -->
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
@@ -54,6 +33,60 @@
             </a>
         </div>
     </div>
+
+    @if(($user->isBidangPemberdayaan() || $user->isAdmin()) && isset($reportQueues) && count($reportQueues) > 0)
+        <!-- UGB Report Queue Table -->
+        <div class="glass-panel rounded-2xl overflow-hidden mb-10 border-indigo-500/20 bg-slate-950/20 glow-indigo">
+            <div class="px-6 py-4 border-b border-slate-900 bg-slate-900/30 flex justify-between items-center">
+                <h3 class="font-bold text-white text-base flex items-center gap-2">
+                    <span>📤</span> Antrean Laporan Pelaksanaan UGB ({{ count($reportQueues) }})
+                </h3>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="border-b border-slate-900 text-xs font-bold text-slate-400 uppercase bg-slate-950/40">
+                            <th class="px-6 py-4">Tanggal Pengiriman</th>
+                            <th class="px-6 py-4">Penyelenggara Undian</th>
+                            <th class="px-6 py-4">Nomor Izin UGB</th>
+                            <th class="px-6 py-4">Status Laporan</th>
+                            <th class="px-6 py-4 text-right">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-900 text-xs text-slate-350">
+                        @foreach($reportQueues as $rq)
+                            <tr class="hover:bg-slate-900/20 transition">
+                                <td class="px-6 py-4 text-slate-400 font-medium">
+                                    {{ $rq->laporan_submitted_at ? $rq->laporan_submitted_at->format('d M Y H:i') : '-' }}
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="font-bold text-white text-sm">{{ $rq->pemohon->name }}</div>
+                                    @if($rq->pemohon->nama_lembaga)
+                                        <div class="text-[10px] text-slate-500 mt-0.5 font-medium">{{ $rq->pemohon->nama_lembaga }}</div>
+                                    @endif
+                                </td>
+                                <td class="px-6 py-4 font-semibold text-slate-300">
+                                    {{ $rq->nomor_izin }}
+                                    <div class="text-[10px] text-slate-500 mt-0.5">ID: #{{ $rq->id }}</div>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <span class="inline-flex items-center rounded-md px-2 py-0.5 text-[10px] font-bold bg-emerald-500/10 text-emerald-400 ring-1 ring-emerald-500/20">
+                                        BUTUH VERIFIKASI LAPORAN
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 text-right">
+                                    <a href="{{ route('perizinan.show', $rq->id) }}" class="inline-flex items-center justify-center rounded-lg bg-emerald-600/15 border border-emerald-500/25 px-4 py-2 text-xs font-bold text-emerald-400 hover:bg-emerald-600 hover:text-white transition">
+                                        🔑 Ulas Laporan UGB
+                                    </a>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    @endif
 
     <!-- Queue Table -->
     <div class="glass-panel rounded-2xl overflow-hidden mb-10">

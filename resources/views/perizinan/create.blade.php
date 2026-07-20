@@ -40,9 +40,14 @@
                     </ul>
                 </div>
             </div>
-            <a href="{{ route('perizinan.form', 'ugb') }}" class="block w-full text-center rounded-xl bg-slate-900 py-3 text-xs font-bold text-slate-200 ring-1 ring-slate-800 hover:bg-emerald-500 hover:text-slate-950 hover:ring-0 transition duration-200">
-                Mulai Pengajuan &rarr;
-            </a>
+            <div class="flex gap-3">
+                <a href="{{ route('perizinan.sop.ugb') }}" class="flex-1 text-center rounded-xl bg-slate-900 py-3 text-xs font-bold text-slate-200 ring-1 ring-slate-800 hover:bg-slate-800 transition duration-200">
+                    📖 Alur SOP UGB
+                </a>
+                <a href="{{ route('perizinan.form', 'ugb') }}" class="flex-1 text-center rounded-xl bg-emerald-600 py-3 text-xs font-bold text-white hover:bg-emerald-500 transition duration-200">
+                    Mulai Pengajuan &rarr;
+                </a>
+            </div>
         </div>
 
         <!-- PUB Card -->
