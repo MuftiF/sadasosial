@@ -15,7 +15,7 @@
     <!-- Alert Box: Rejection Reason -->
     <div class="w-full p-5 rounded-2xl border border-rose-500/30 bg-rose-500/5 mb-8 flex gap-4 items-start">
         <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-rose-500/10 text-rose-400 text-lg">
-            ⚠️
+            <x-heroicon-o-exclamation-triangle class="w-5 h-5 inline-block mr-1" />
         </span>
         <div>
             <h4 class="text-sm font-bold text-rose-400">Pendaftaran Ditolak / Perlu Perbaikan</h4>

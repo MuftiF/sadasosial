@@ -27,7 +27,7 @@
         <div class="mb-8 p-4 rounded-2xl border border-indigo-500/20 bg-indigo-500/5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div class="flex items-center gap-3">
                 <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-500/20 text-indigo-400 font-extrabold">
-                    🔑
+                    <x-heroicon-o-key class="w-5 h-5 inline-block mr-1" />
                 </span>
                 <div>
                     <h3 class="text-sm font-bold text-slate-200">Hak Akses Administrator</h3>
@@ -70,7 +70,7 @@
                 <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">
                     {{ $user->isStaff() ? 'Antrean Tugas Aktif' : 'Total Permohonan' }}
                 </span>
-                <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-500/10 text-emerald-400 text-sm">📄</span>
+                <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-500/10 text-emerald-400 text-sm"><x-heroicon-o-document-text class="w-4 h-4 inline-block mr-1" /></span>
             </div>
             <h2 class="text-2xl font-black text-white">{{ $stats['total_permohonan'] }}</h2>
             <p class="text-[11px] text-emerald-400 font-semibold mt-2 flex items-center gap-1">
@@ -84,7 +84,7 @@
                 <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">
                     {{ $user->isStaff() ? 'Belum Diulas' : 'Sedang Diproses' }}
                 </span>
-                <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-500/10 text-blue-400 text-sm">⏳</span>
+                <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-500/10 text-blue-400 text-sm"><x-heroicon-o-clock class="w-5 h-5 inline-block mr-1" /></span>
             </div>
             <h2 class="text-2xl font-black text-white">{{ $stats['diperiksa'] }}</h2>
             <p class="text-[11px] text-blue-400 font-semibold mt-2 flex items-center gap-1">
@@ -102,7 +102,7 @@
                 <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">
                     {{ $user->isStaff() ? 'Telah Diteruskan/Selesai' : 'Disetujui & Selesai' }}
                 </span>
-                <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-purple-500/10 text-purple-400 text-sm">✅</span>
+                <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-purple-500/10 text-purple-400 text-sm"><x-heroicon-o-check-circle class="w-5 h-5 inline-block mr-1" /></span>
             </div>
             <h2 class="text-2xl font-black text-white">{{ $stats['disetujui'] + $stats['selesai'] }}</h2>
             <p class="text-[11px] text-purple-400 font-semibold mt-2 flex items-center gap-1">
@@ -124,7 +124,7 @@
                 <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">
                     {{ $user->isStaff() ? 'Kasus Ditolak/Kembali' : 'Ditolak' }}
                 </span>
-                <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-rose-500/10 text-rose-400 text-sm">❌</span>
+                <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-rose-500/10 text-rose-400 text-sm"><x-heroicon-o-x-circle class="w-4 h-4 inline-block mr-1" /></span>
             </div>
             <h2 class="text-2xl font-black text-white">{{ $stats['ditolak'] }}</h2>
             <p class="text-[11px] text-rose-400 font-semibold mt-2 flex items-center gap-1">
@@ -149,7 +149,7 @@
             </div>
 
             <div class="glass-panel rounded-2xl p-8 text-center">
-                <span class="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-500/10 text-emerald-600 text-xl mx-auto mb-4 font-bold">🔑</span>
+                <span class="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-500/10 text-emerald-600 text-xl mx-auto mb-4 font-bold"><x-heroicon-o-key class="w-5 h-5 inline-block mr-1" /></span>
                 <h4 class="text-base font-extrabold text-slate-200 mb-2">Buka Antrean Tugas Anda</h4>
                 <p class="text-xs text-slate-500 leading-relaxed mb-6">
                     Anda masuk sebagai petugas dengan peran <strong>{{ strtoupper($user->role) }}</strong>. Buka halaman antrean verifikasi untuk memproses seluruh pengajuan yang menunggu keputusan Anda.
@@ -198,7 +198,7 @@
                             </div>
                             @if($permohonan->status === 'ditolak')
                                 <div class="p-2.5 rounded-xl bg-rose-500/5 border border-rose-500/20">
-                                    <p class="text-[11px] text-rose-400 font-semibold">⚠️ Permohonan Anda ditolak. Klik untuk melihat detail.</p>
+                                    <p class="text-[11px] text-rose-400 font-semibold"><x-heroicon-o-exclamation-triangle class="w-5 h-5 inline-block mr-1" /> Permohonan Anda ditolak. Klik untuk melihat detail.</p>
                                 </div>
                             @endif
                             <div class="flex items-center gap-1 text-[11px] text-slate-500 group-hover:text-emerald-400 transition-colors mt-1">

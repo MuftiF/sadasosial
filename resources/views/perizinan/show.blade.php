@@ -14,15 +14,23 @@
             <h1 class="text-2xl font-extrabold text-white tracking-tight">Detail Permohonan #{{ $perizinan->id }}</h1>
             <p class="text-xs text-slate-400 mt-0.5">Pantau alur verifikasi secara real-time dan ulasan petugas dinas sosial.</p>
         </div>
-        <div class="flex items-center gap-3">
+        <div class="flex flex-wrap items-center gap-3">
+            @if($user->isStaff())
+                <a href="{{ route('admin.perizinan.berita_acara.create', $perizinan->id) }}" class="inline-flex items-center justify-center rounded-xl bg-slate-800 px-4 py-2.5 text-xs font-bold text-slate-200 hover:bg-slate-700 transition duration-200 border border-slate-700 shadow-sm">
+                    <x-heroicon-o-pencil-square class="w-4 h-4 inline-block mr-1" /> Berita Acara
+                </a>
+            @endif
+            <a href="{{ route('perizinan.dokumen.index', $perizinan->id) }}" class="inline-flex items-center justify-center rounded-xl bg-blue-600 px-4 py-2.5 text-xs font-bold text-white hover:bg-blue-500 transition duration-200 shadow-sm">
+                <x-heroicon-o-folder class="w-4 h-4 inline-block mr-1" /> Kelola Dokumen
+            </a>
             @if($perizinan->status === 'selesai')
                 <a href="{{ route('perizinan.download_pdf', $perizinan->id) }}" target="_blank" class="inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-emerald-500 to-teal-400 px-4 py-2.5 text-xs font-bold text-slate-950 shadow-md hover:opacity-90 transition duration-200">
-                    📥 Cetak Rekomendasi / Izin
+                    <x-heroicon-o-arrow-down-tray class="w-4 h-4 inline-block mr-1" /> Cetak Rekomendasi / Izin
                 </a>
             @endif
             @if(($perizinan->pemohon_id === $user->id) && ($perizinan->perlu_perbaikan || $perizinan->status === 'draft'))
-                <a href="{{ route('perizinan.edit', $perizinan->id) }}" class="inline-flex items-center justify-center rounded-xl bg-amber-500 px-4 py-2.5 text-xs font-bold text-slate-950 hover:bg-amber-400 transition duration-200">
-                    ✏️ Perbaiki & Lengkapi Data
+                <a href="{{ route('perizinan.edit', $perizinan->id) }}" class="inline-flex items-center justify-center rounded-xl bg-amber-500 px-4 py-2.5 text-xs font-bold text-slate-950 hover:bg-amber-400 transition duration-200 shadow-sm">
+                    <x-heroicon-o-pencil class="w-4 h-4 inline-block mr-1" /> Perbaiki & Lengkapi Data
                 </a>
             @endif
         </div>
@@ -31,7 +39,7 @@
     <!-- Alert for Revision/Repair -->
     @if($perizinan->perlu_perbaikan)
         <div class="mb-8 p-4 rounded-2xl border border-amber-500/20 bg-amber-500/5 flex items-start gap-3">
-            <span class="text-lg">⚠️</span>
+            <span class="text-lg"><x-heroicon-o-exclamation-triangle class="w-5 h-5 inline-block mr-1" /></span>
             <div>
                 <h4 class="text-sm font-bold text-amber-400">Butuh Perbaikan Dokumen / Informasi</h4>
                 <p class="text-xs text-slate-300 mt-1">
@@ -205,7 +213,7 @@
             <!-- Uploaded Documents card -->
             <div class="glass-panel rounded-3xl p-6">
                 <h3 class="font-extrabold text-white text-base border-b border-slate-900 pb-4 mb-4 flex items-center gap-2">
-                    <span>📎</span> Berkas Pendukung
+                    <span><x-heroicon-o-paper-clip class="w-5 h-5 inline-block mr-1" /></span> Berkas Pendukung
                 </h3>
                 <div class="space-y-3">
                     @php
@@ -230,7 +238,7 @@
                             $fileSize = $fileExists ? round(Storage::disk('public')->size($filePath) / 1024, 1) . ' KB' : null;
                             $isImage = in_array($fileExt, ['jpg', 'jpeg', 'png', 'webp']);
                             $isPdf = $fileExt === 'pdf';
-                            $fileIcon = $isPdf ? '📄' : ($isImage ? '🖼️' : '📁');
+                            $fileIcon = $isPdf ? '<x-heroicon-o-document-text class="w-4 h-4 inline-block mr-1" />' : ($isImage ? '<x-heroicon-o-photo class="w-5 h-5 inline-block mr-1" />' : '<x-heroicon-o-folder class="w-4 h-4 inline-block mr-1" />');
                             $fileUrl = $filePath ? Storage::url($filePath) : null;
                         @endphp
                         <div class="rounded-2xl bg-slate-950/40 border border-slate-900 overflow-hidden">
@@ -308,19 +316,19 @@
                                 <span class="text-[10px] text-slate-500 block font-bold uppercase tracking-wide">Berkas Laporan</span>
                                 @if(isset($lap['dokumen_laporan']))
                                     <div class="flex items-center justify-between p-3 rounded-2xl bg-slate-950/40 border border-slate-900">
-                                        <span class="text-xs text-slate-300 font-medium">📄 Laporan Pelaksanaan UGB</span>
+                                        <span class="text-xs text-slate-300 font-medium"><x-heroicon-o-document-text class="w-4 h-4 inline-block mr-1" /> Laporan Pelaksanaan UGB</span>
                                         <a href="{{ Storage::url($lap['dokumen_laporan']) }}" target="_blank" class="text-xs font-bold text-emerald-400 hover:underline">Unduh &rarr;</a>
                                     </div>
                                 @endif
                                 @if(isset($lap['daftar_pemenang']))
                                     <div class="flex items-center justify-between p-3 rounded-2xl bg-slate-950/40 border border-slate-900">
-                                        <span class="text-xs text-slate-300 font-medium">📋 Daftar Pemenang Undian</span>
+                                        <span class="text-xs text-slate-300 font-medium"><x-heroicon-o-clipboard-document-list class="w-5 h-5 inline-block mr-1" /> Daftar Pemenang Undian</span>
                                         <a href="{{ Storage::url($lap['daftar_pemenang']) }}" target="_blank" class="text-xs font-bold text-emerald-400 hover:underline">Unduh &rarr;</a>
                                     </div>
                                 @endif
                                 @if(isset($lap['dokumentasi_kegiatan']))
                                     <div class="flex items-center justify-between p-3 rounded-2xl bg-slate-950/40 border border-slate-900">
-                                        <span class="text-xs text-slate-300 font-medium">📸 Dokumentasi & Foto Saksi</span>
+                                        <span class="text-xs text-slate-300 font-medium"><x-heroicon-o-camera class="w-5 h-5 inline-block mr-1" /> Dokumentasi & Foto Saksi</span>
                                         <a href="{{ Storage::url($lap['dokumentasi_kegiatan']) }}" target="_blank" class="text-xs font-bold text-emerald-400 hover:underline">Unduh &rarr;</a>
                                     </div>
                                 @endif
@@ -342,7 +350,7 @@
                     <!-- Checklist SOP UGB -->
                     <div class="mt-4 p-4 rounded-2xl bg-slate-100 border border-slate-200">
                         <h4 class="text-xs font-bold text-slate-800 mb-3 flex items-center gap-1.5">
-                            <span>🗳️</span> Checklist Panduan Pelaksanaan (SOP UGB)
+                            <span><x-heroicon-o-inbox-stack class="w-5 h-5 inline-block mr-1" /></span> Checklist Panduan Pelaksanaan (SOP UGB)
                         </h4>
                         <div class="space-y-2.5">
                             <!-- Step 1 (Auto Checked) -->
@@ -407,17 +415,17 @@
                             @if($perizinan->laporan_status === 'disetujui')
                                 {{-- Laporan sudah disetujui — tidak ada lagi yang bisa dilakukan --}}
                                 <div class="w-full inline-flex items-center justify-center rounded-xl bg-emerald-500/10 border border-emerald-500/20 py-2.5 text-xs font-bold text-emerald-400 gap-2">
-                                    ✅ Laporan Pelaksanaan Telah Disetujui
+                                    <x-heroicon-o-check-circle class="w-5 h-5 inline-block mr-1" /> Laporan Pelaksanaan Telah Disetujui
                                 </div>
                             @elseif($perizinan->laporan_status === 'diperiksa')
                                 {{-- Laporan sedang ditinjau — tidak bisa kirim lagi --}}
                                 <div class="w-full inline-flex items-center justify-center rounded-xl bg-blue-500/10 border border-blue-500/20 py-2.5 text-xs font-bold text-blue-400 gap-2">
-                                    ⏳ Laporan Sedang Ditinjau Petugas...
+                                    <x-heroicon-o-clock class="w-5 h-5 inline-block mr-1" /> Laporan Sedang Ditinjau Petugas...
                                 </div>
                             @else
                                 {{-- Belum kirim atau perlu perbaikan — tampilkan tombol --}}
                                 <a href="{{ route('perizinan.laporan.form', $perizinan->id) }}" class="w-full inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-emerald-500 to-teal-400 py-2.5 text-xs font-bold text-slate-950 shadow-md hover:opacity-90 hover:scale-[1.01] transition-all duration-200">
-                                    {{ $perizinan->laporan_status === 'perlu_perbaikan' ? '✏️ Perbaiki Laporan Pelaksanaan' : '📤 Kirim Laporan Pelaksanaan UGB' }}
+                                    {{ $perizinan->laporan_status === 'perlu_perbaikan' ? '<x-heroicon-o-pencil class="w-4 h-4 inline-block mr-1" /> Perbaiki Laporan Pelaksanaan' : '<x-heroicon-o-arrow-up-tray class="w-5 h-5 inline-block mr-1" /> Kirim Laporan Pelaksanaan UGB' }}
                                 </a>
                             @endif
                         </div>
@@ -442,7 +450,7 @@
                         <div class="relative">
                             <!-- Timeline Dot -->
                             <span class="absolute -left-[31px] top-1 flex h-4.5 w-4.5 items-center justify-center rounded-full bg-emerald-500 text-[10px] ring-4 ring-slate-950">
-                                ✓
+                                <x-heroicon-s-check class="w-3 h-3 inline-block" />
                             </span>
                             <div>
                                 <div class="flex items-center justify-between gap-2">
@@ -463,7 +471,7 @@
                     @if($perizinan->status === 'diperiksa')
                         <div class="relative">
                             <span class="absolute -left-[31px] top-1 flex h-4.5 w-4.5 animate-pulse items-center justify-center rounded-full bg-blue-500 text-[10px] ring-4 ring-slate-950">
-                                ⏳
+                                <x-heroicon-o-clock class="w-5 h-5 inline-block mr-1" />
                             </span>
                             <div>
                                 <h4 class="text-xs font-bold text-blue-400">
@@ -503,7 +511,7 @@
                 @if($isRoleMatch)
                     <div class="glass-panel rounded-3xl p-6 border-indigo-500/20 bg-indigo-500/5 glow-indigo">
                         <h3 class="font-extrabold text-white text-base border-b border-indigo-500/10 pb-4 mb-4 flex items-center gap-2">
-                            <span>🔑</span> Panel Keputusan Petugas
+                            <span><x-heroicon-o-key class="w-5 h-5 inline-block mr-1" /></span> Panel Keputusan Petugas
                         </h3>
                         <p class="text-[11px] text-slate-400 mb-4">Ulas dokumen di sebelah kiri, lalu pilih tindakan keputusan di bawah ini.</p>
 
@@ -566,7 +574,7 @@
                 @if($user->isBidangPemberdayaan() || $user->isAdmin())
                     <div class="glass-panel rounded-3xl p-6 border-indigo-500/20 bg-indigo-500/5 glow-indigo mt-6">
                         <h3 class="font-extrabold text-white text-base border-b border-indigo-500/10 pb-4 mb-4 flex items-center gap-2">
-                            <span>🔑</span> Panel Keputusan Laporan UGB
+                            <span><x-heroicon-o-key class="w-5 h-5 inline-block mr-1" /></span> Panel Keputusan Laporan UGB
                         </h3>
                         <p class="text-[11px] text-slate-400 mb-4">Ulas dokumen laporan pelaksanaan di sebelah kiri, lalu pilih keputusan verifikasi.</p>
 

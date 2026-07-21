@@ -23,7 +23,7 @@
         <div class="glass-panel rounded-2xl overflow-hidden mb-10 border-indigo-500/20 bg-slate-950/20 glow-indigo">
             <div class="px-6 py-4 border-b border-slate-200 bg-slate-50 flex justify-between items-center">
                 <h3 class="font-bold text-slate-800 text-base flex items-center gap-2">
-                    <span>📤</span> Antrean Laporan Pelaksanaan UGB ({{ count($reportQueues) }})
+                    <span><x-heroicon-o-arrow-up-tray class="w-5 h-5 inline-block mr-1" /></span> Antrean Laporan Pelaksanaan UGB ({{ count($reportQueues) }})
                 </h3>
             </div>
 
@@ -61,7 +61,7 @@
                                 </td>
                                 <td class="px-6 py-4 text-right">
                                     <a href="{{ route('perizinan.show', $rq->id) }}" class="inline-flex items-center justify-center rounded-lg bg-emerald-600/15 border border-emerald-500/25 px-4 py-2 text-xs font-bold text-emerald-600 hover:bg-emerald-600 hover:text-white transition">
-                                        🔑 Ulas Laporan UGB
+                                        <x-heroicon-o-key class="w-5 h-5 inline-block mr-1" /> Ulas Laporan UGB
                                     </a>
                                 </td>
                             </tr>
@@ -115,7 +115,7 @@
                             </td>
                             <td class="px-6 py-4 text-right">
                                 <a href="{{ route('perizinan.show', $q->id) }}" class="inline-flex items-center justify-center rounded-lg bg-emerald-600/15 border border-emerald-500/25 px-4 py-2 text-xs font-bold text-emerald-600 hover:bg-emerald-600 hover:text-white transition">
-                                    🔑 Ulas &amp; Proses
+                                    <x-heroicon-o-key class="w-5 h-5 inline-block mr-1" /> Ulas &amp; Proses
                                 </a>
                             </td>
                         </tr>

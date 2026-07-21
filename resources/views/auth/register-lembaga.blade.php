@@ -166,7 +166,7 @@
 
                         <!-- File name preview -->
                         <p id="file-name-preview" class="text-xs text-emerald-400 font-medium hidden mt-1">
-                            ✓ <span id="file-name-text"></span>
+                            <x-heroicon-s-check class="w-3 h-3 inline-block" /> <span id="file-name-text"></span>
                         </p>
 
                         @error('dokumen_legalitas')

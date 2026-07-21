@@ -19,7 +19,7 @@
     @if($perizinan->catatan_perbaikan)
         <div class="mb-8 p-5 rounded-2xl border border-amber-500/20 bg-amber-500/5">
             <h4 class="text-sm font-bold text-amber-400 flex items-center gap-1.5">
-                <span>⚠️</span> Catatan Perbaikan Petugas:
+                <span><x-heroicon-o-exclamation-triangle class="w-5 h-5 inline-block mr-1" /></span> Catatan Perbaikan Petugas:
             </h4>
             <p class="text-xs text-slate-200 mt-2 italic bg-slate-950 p-4 rounded-xl border border-slate-900 leading-relaxed">
                 "{{ $perizinan->catatan_perbaikan }}"
@@ -80,7 +80,7 @@
                             <input type="file" id="dokumen_proposal" name="dokumen_proposal"
                                 class="block w-full text-xs text-slate-400 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-slate-900 file:text-slate-200 hover:file:bg-slate-800 cursor-pointer">
                             @if(isset($data['dokumen_proposal']))
-                                <span class="text-[10px] text-emerald-400 block mt-1">✓ Berkas proposal sudah terunggah sebelumnya</span>
+                                <span class="text-[10px] text-emerald-400 block mt-1"><x-heroicon-s-check class="w-3 h-3 inline-block" /> Berkas proposal sudah terunggah sebelumnya</span>
                             @endif
                         </div>
                         <div class="space-y-1.5">
@@ -88,7 +88,7 @@
                             <input type="file" id="dokumen_hadiah" name="dokumen_hadiah"
                                 class="block w-full text-xs text-slate-400 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-slate-900 file:text-slate-200 hover:file:bg-slate-800 cursor-pointer">
                             @if(isset($data['dokumen_hadiah']))
-                                <span class="text-[10px] text-emerald-400 block mt-1">✓ Berkas rincian hadiah sudah terunggah sebelumnya</span>
+                                <span class="text-[10px] text-emerald-400 block mt-1"><x-heroicon-s-check class="w-3 h-3 inline-block" /> Berkas rincian hadiah sudah terunggah sebelumnya</span>
                             @endif
                         </div>
                     </div>
@@ -142,7 +142,7 @@
                             <input type="file" id="dokumen_proposal" name="dokumen_proposal"
                                 class="block w-full text-xs text-slate-400 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-slate-900 file:text-slate-200 hover:file:bg-slate-800 cursor-pointer">
                             @if(isset($data['dokumen_proposal']))
-                                <span class="text-[10px] text-emerald-400 block mt-1">✓ Berkas proposal sudah terunggah sebelumnya</span>
+                                <span class="text-[10px] text-emerald-400 block mt-1"><x-heroicon-s-check class="w-3 h-3 inline-block" /> Berkas proposal sudah terunggah sebelumnya</span>
                             @endif
                         </div>
                         <div class="space-y-1.5">
@@ -150,7 +150,7 @@
                             <input type="file" id="dokumen_rekening" name="dokumen_rekening"
                                 class="block w-full text-xs text-slate-400 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-slate-900 file:text-slate-200 hover:file:bg-slate-800 cursor-pointer">
                             @if(isset($data['dokumen_rekening']))
-                                <span class="text-[10px] text-emerald-400 block mt-1">✓ Berkas rekening sudah terunggah sebelumnya</span>
+                                <span class="text-[10px] text-emerald-400 block mt-1"><x-heroicon-s-check class="w-3 h-3 inline-block" /> Berkas rekening sudah terunggah sebelumnya</span>
                             @endif
                         </div>
                     </div>
@@ -197,7 +197,7 @@
                             <input type="file" id="dokumen_akta" name="dokumen_akta"
                                 class="block w-full text-xs text-slate-400 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-slate-900 file:text-slate-200 hover:file:bg-slate-800 cursor-pointer">
                             @if(isset($data['dokumen_akta']))
-                                <span class="text-[10px] text-emerald-400 block mt-1">✓ Berkas akta LKS sudah terunggah sebelumnya</span>
+                                <span class="text-[10px] text-emerald-400 block mt-1"><x-heroicon-s-check class="w-3 h-3 inline-block" /> Berkas akta LKS sudah terunggah sebelumnya</span>
                             @endif
                         </div>
                         <div class="space-y-1.5">
@@ -205,7 +205,7 @@
                             <input type="file" id="dokumen_domisili" name="dokumen_domisili"
                                 class="block w-full text-xs text-slate-400 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-slate-900 file:text-slate-200 hover:file:bg-slate-800 cursor-pointer">
                             @if(isset($data['dokumen_domisili']))
-                                <span class="text-[10px] text-emerald-400 block mt-1">✓ Berkas domisili LKS sudah terunggah sebelumnya</span>
+                                <span class="text-[10px] text-emerald-400 block mt-1"><x-heroicon-s-check class="w-3 h-3 inline-block" /> Berkas domisili LKS sudah terunggah sebelumnya</span>
                             @endif
                         </div>
                     </div>
@@ -287,7 +287,7 @@
                             <input type="file" id="dokumen_nikah" name="dokumen_nikah"
                                 class="block w-full text-xs text-slate-400 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-slate-900 file:text-slate-200 hover:file:bg-slate-800 cursor-pointer">
                             @if(isset($data['dokumen_nikah']))
-                                <span class="text-[10px] text-emerald-400 block mt-1">✓ Berkas akta nikah sudah terunggah sebelumnya</span>
+                                <span class="text-[10px] text-emerald-400 block mt-1"><x-heroicon-s-check class="w-3 h-3 inline-block" /> Berkas akta nikah sudah terunggah sebelumnya</span>
                             @endif
                         </div>
                         <div class="space-y-1.5">
@@ -295,7 +295,7 @@
                             <input type="file" id="dokumen_sehat" name="dokumen_sehat"
                                 class="block w-full text-xs text-slate-400 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-slate-900 file:text-slate-200 hover:file:bg-slate-800 cursor-pointer">
                             @if(isset($data['dokumen_sehat']))
-                                <span class="text-[10px] text-emerald-400 block mt-1">✓ Berkas surat sehat sudah terunggah sebelumnya</span>
+                                <span class="text-[10px] text-emerald-400 block mt-1"><x-heroicon-s-check class="w-3 h-3 inline-block" /> Berkas surat sehat sudah terunggah sebelumnya</span>
                             @endif
                         </div>
                     </div>

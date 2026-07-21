@@ -5,6 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\PerizinanDokumen;
+use App\Models\BeritaAcara;
+use App\Models\PenyegelanUgb;
 
 class Perizinan extends Model
 {
@@ -46,5 +49,20 @@ class Perizinan extends Model
     public function pemohon()
     {
         return $this->belongsTo(User::class, 'pemohon_id');
+    }
+
+    public function dokumens()
+    {
+        return $this->hasMany(PerizinanDokumen::class);
+    }
+
+    public function beritaAcaras()
+    {
+        return $this->hasMany(BeritaAcara::class);
+    }
+
+    public function penyegelan()
+    {
+        return $this->hasOne(PenyegelanUgb::class);
     }
 }

@@ -13,7 +13,7 @@
         <!-- Hero Section -->
         <div class="text-center max-w-3xl mx-auto mb-20">
             <span class="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/10 px-3 py-1 text-xs font-bold text-emerald-400 ring-1 ring-inset ring-emerald-500/20 mb-6">
-                ✨ Selamat Datang di Sada Sosial
+                <x-heroicon-o-sparkles class="w-5 h-5 inline-block mr-1" /> Selamat Datang di Sada Sosial
             </span>
             <h1 class="text-4xl sm:text-6xl font-black text-white tracking-tight leading-none mb-6">
                 Portal Layanan &amp; <span class="bg-gradient-to-r from-emerald-400 to-teal-300 bg-clip-text text-transparent">Perizinan Sosial</span> Terpadu
@@ -42,7 +42,7 @@
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-24">
             <!-- Feature 1 -->
             <div class="glass-panel rounded-2xl p-6 hover:border-slate-800 transition duration-200">
-                <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/10 text-emerald-400 text-lg mb-4">📄</span>
+                <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/10 text-emerald-400 text-lg mb-4"><x-heroicon-o-document-text class="w-4 h-4 inline-block mr-1" /></span>
                 <h3 class="text-lg font-bold text-white mb-2">Pengajuan Online</h3>
                 <p class="text-sm text-slate-400 leading-relaxed">
                     Unggah dokumen persyaratan dan isi formulir permohonan langsung dari rumah tanpa perlu mengantre di kantor dinas.
@@ -51,7 +51,7 @@
 
             <!-- Feature 2 -->
             <div class="glass-panel rounded-2xl p-6 hover:border-slate-800 transition duration-200">
-                <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-teal-500/10 text-teal-400 text-lg mb-4">🛡️</span>
+                <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-teal-500/10 text-teal-400 text-lg mb-4"><x-heroicon-o-shield-check class="w-5 h-5 inline-block mr-1" /></span>
                 <h3 class="text-lg font-bold text-white mb-2">Validasi Terintegrasi</h3>
                 <p class="text-sm text-slate-400 leading-relaxed">
                     Validasi data identitas perorangan (NIK/KK) dan data legalitas hukum organisasi sosial secara aman dan akurat.
@@ -60,7 +60,7 @@
 
             <!-- Feature 3 -->
             <div class="glass-panel rounded-2xl p-6 hover:border-slate-800 transition duration-200">
-                <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-500/10 text-indigo-400 text-lg mb-4">⏳</span>
+                <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-500/10 text-indigo-400 text-lg mb-4"><x-heroicon-o-clock class="w-5 h-5 inline-block mr-1" /></span>
                 <h3 class="text-lg font-bold text-white mb-2">Pantau Real-Time</h3>
                 <p class="text-sm text-slate-400 leading-relaxed">
                     Dapatkan transparansi penuh dengan notifikasi progres dan catatan perbaikan langsung dari tim verifikator dinas.

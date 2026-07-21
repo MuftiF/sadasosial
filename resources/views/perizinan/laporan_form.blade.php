@@ -25,7 +25,7 @@
             <!-- Banner status jika dalam perbaikan -->
             @if($perizinan->laporan_status === 'perlu_perbaikan')
                 <div class="p-4 rounded-2xl border border-amber-500/20 bg-amber-500/5 flex items-start gap-3">
-                    <span class="text-lg">⚠️</span>
+                    <span class="text-lg"><x-heroicon-o-exclamation-triangle class="w-5 h-5 inline-block mr-1" /></span>
                     <div>
                         <h4 class="text-sm font-bold text-amber-400">Butuh Perbaikan Laporan</h4>
                         <p class="text-xs text-slate-300 mt-1">

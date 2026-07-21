@@ -11,7 +11,7 @@
                 
                 <div class="flex justify-center">
                     <span class="flex h-16 w-16 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-400 text-3xl ring-8 ring-emerald-500/5">
-                        🛡️
+                        <x-heroicon-o-shield-check class="w-5 h-5 inline-block mr-1" />
                     </span>
                 </div>
 
@@ -85,7 +85,7 @@
                 
                 <div class="flex justify-center">
                     <span class="flex h-16 w-16 items-center justify-center rounded-full bg-rose-500/10 text-rose-400 text-3xl ring-8 ring-rose-500/5">
-                        ❌
+                        <x-heroicon-o-x-circle class="w-4 h-4 inline-block mr-1" />
                     </span>
                 </div>
 

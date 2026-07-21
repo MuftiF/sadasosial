@@ -134,7 +134,7 @@
                                                  </span>
                                              @elseif($u->validation_status === 'validated')
                                                  <span class="inline-flex items-center rounded-md px-2 py-0.5 text-xs font-bold bg-emerald-400/10 text-emerald-400 ring-1 ring-inset ring-emerald-400/20 w-fit">
-                                                     ✓ Terverifikasi
+                                                     <x-heroicon-s-check class="w-3 h-3 inline-block" /> Terverifikasi
                                                  </span>
                                              @else
                                                  <span class="inline-flex items-center rounded-md px-2 py-0.5 text-xs font-bold bg-rose-400/10 text-rose-400 ring-1 ring-inset ring-rose-400/20 w-fit">
@@ -148,13 +148,13 @@
                                  <td class="px-6 py-4 text-right">
                                      <div class="inline-flex gap-2">
                                          <!-- Edit Button -->
-                                         <button onclick="openEditModal({{ json_encode($u) }})" class="inline-flex items-center justify-center rounded-lg bg-slate-800 px-3 py-1.5 text-xs font-bold text-slate-200 hover:bg-slate-700 hover:text-white transition">
+                                         <button onclick="openEditModal({{ json_encode($u) }})" class="inline-flex items-center justify-center rounded-lg bg-blue-500 px-3 py-1.5 text-xs font-bold text-white hover:bg-blue-600 transition">
                                              Edit
                                          </button>
 
                                          @if(!$u->isAdmin())
                                              <!-- View Detail -->
-                                             <button onclick="openUserDetailModal({{ json_encode($u) }}, {{ json_encode($u->validationLogs) }})" class="inline-flex items-center justify-center rounded-lg bg-violet-500/10 px-3 py-1.5 text-xs font-bold text-violet-400 hover:bg-violet-500/20 transition">
+                                             <button onclick="openUserDetailModal({{ json_encode($u) }}, {{ json_encode($u->validationLogs) }})" class="inline-flex items-center justify-center rounded-lg bg-emerald-500 px-3 py-1.5 text-xs font-bold text-white hover:bg-emerald-600 transition">
                                                  Detail &amp; Validasi
                                              </button>
                                          @endif
@@ -164,7 +164,7 @@
                                             <form action="{{ route('admin.users.destroy', $u) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus user ini?')" class="inline">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="inline-flex items-center justify-center rounded-lg bg-rose-500/10 px-3 py-1.5 text-xs font-bold text-rose-400 hover:bg-rose-500/20 transition">
+                                                <button type="submit" class="inline-flex items-center justify-center rounded-lg bg-red-500 px-3 py-1.5 text-xs font-bold text-white hover:bg-red-600 transition">
                                                     Hapus
                                                 </button>
                                             </form>
@@ -244,13 +244,13 @@
                                             @csrf
                                             @method('PUT')
                                             <input type="hidden" name="action" value="approved">
-                                            <button type="submit" class="bg-emerald-500/10 px-3 py-1.5 rounded-lg text-xs font-bold text-emerald-400 border border-emerald-500/20 hover:bg-emerald-500/20 transition">
+                                            <button type="submit" class="inline-flex items-center justify-center rounded-lg bg-emerald-500 px-3 py-1.5 text-xs font-bold text-white hover:bg-emerald-600 transition">
                                                 Setujui
                                             </button>
                                         </form>
 
                                         <!-- Reject Trigger -->
-                                        <button onclick="openProfileRejectModal({{ $req->id }})" class="bg-rose-500/10 px-3 py-1.5 rounded-lg text-xs font-bold text-rose-400 border border-rose-500/20 hover:bg-rose-500/20 transition">
+                                        <button onclick="openProfileRejectModal({{ $req->id }})" class="inline-flex items-center justify-center rounded-lg bg-red-500 px-3 py-1.5 text-xs font-bold text-white hover:bg-red-600 transition">
                                             Tolak
                                         </button>
                                     </div>
@@ -519,7 +519,7 @@
             <div class="flex flex-wrap gap-3">
                 <button type="submit" name="validation_action" value="validated" onclick="return confirm('Setujui dan aktifkan akun ini?')"
                     class="rounded-xl bg-emerald-500 px-4 py-2 text-xs font-bold text-slate-950 shadow-md hover:opacity-95 transition">
-                    ✓ Setujui &amp; Aktifkan Akun
+                    <x-heroicon-s-check class="w-3 h-3 inline-block" /> Setujui &amp; Aktifkan Akun
                 </button>
                 <button type="submit" name="validation_action" value="rejected" onclick="return confirm('Tolak pendaftaran akun ini?')"
                     class="rounded-xl bg-rose-600 px-4 py-2 text-xs font-bold text-white shadow-md hover:bg-rose-500 transition">
@@ -603,8 +603,8 @@
 
     function openUserDetailModal(user, logs = []) {
         const statusMap = {
-            'pending': '<span class="font-bold text-amber-400">⏳ Menunggu Verifikasi</span>',
-            'validated': '<span class="font-bold text-emerald-400">✓ Terverifikasi</span>',
+            'pending': '<span class="font-bold text-amber-400"><x-heroicon-o-clock class="w-5 h-5 inline-block mr-1" /> Menunggu Verifikasi</span>',
+            'validated': '<span class="font-bold text-emerald-400"><x-heroicon-s-check class="w-3 h-3 inline-block" /> Terverifikasi</span>',
             'rejected': '<span class="font-bold text-rose-400">✗ Ditolak</span>',
         };
 
@@ -684,7 +684,7 @@
                 btn.type = 'button';
                 btn.onclick = () => submitValidation(user.id, src);
                 btn.className = 'bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-1.5 px-3 rounded-lg text-[10px] transition flex items-center gap-1';
-                btn.innerHTML = `🔍 Cek ${src}`;
+                btn.innerHTML = `<x-heroicon-o-magnifying-glass class="w-5 h-5 inline-block mr-1" /> Cek ${src}`;
                 validationBtnContainer.appendChild(btn);
             });
         } else {
@@ -706,7 +706,7 @@
                 btn.type = 'button';
                 btn.onclick = () => submitValidation(user.id, src);
                 btn.className = 'bg-teal-600 hover:bg-teal-500 text-slate-950 font-bold py-1.5 px-3 rounded-lg text-[10px] transition flex items-center gap-1';
-                btn.innerHTML = `🔍 Cek ${src}`;
+                btn.innerHTML = `<x-heroicon-o-magnifying-glass class="w-5 h-5 inline-block mr-1" /> Cek ${src}`;
                 validationBtnContainer.appendChild(btn);
             });
         }

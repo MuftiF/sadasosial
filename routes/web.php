@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\UserManagementController;
+use App\Http\Controllers\PatroliUgbController;
+use App\Http\Controllers\PenyegelanUgbController;
 
 // 1. Welcome Page
 Route::get('/', function () {
@@ -51,6 +53,10 @@ Route::middleware('auth')->group(function () {
         Route::put('/perizinan/{perizinan}/edit', [\App\Http\Controllers\PerizinanController::class, 'update'])->name('perizinan.update');
         Route::get('/perizinan/{perizinan}/laporan', [\App\Http\Controllers\PerizinanController::class, 'showLaporanForm'])->name('perizinan.laporan.form');
         Route::post('/perizinan/{perizinan}/laporan', [\App\Http\Controllers\PerizinanController::class, 'submitLaporan'])->name('perizinan.laporan.submit');
+
+        // Dokumen Perizinan (upload per jenis dokumen)
+        Route::get('/perizinan/{id}/dokumen', [\App\Http\Controllers\PerizinanController::class, 'getDokumenList'])->name('perizinan.dokumen.index');
+        Route::post('/perizinan/{id}/dokumen', [\App\Http\Controllers\PerizinanController::class, 'uploadDokumen'])->name('perizinan.dokumen.upload');
     });
 
     // 4. User Management Page (Protected + Admin Role required)
@@ -74,7 +80,28 @@ Route::middleware('auth')->group(function () {
         Route::post('/perizinan/monitoring/{id}/alert', [\App\Http\Controllers\PerizinanController::class, 'sendExpiryAlert'])->name('perizinan.send_alert');
         Route::post('/perizinan/{perizinan}/proses', [\App\Http\Controllers\PerizinanController::class, 'process'])->name('perizinan.process');
         Route::post('/perizinan/{perizinan}/laporan/proses', [\App\Http\Controllers\PerizinanController::class, 'processLaporan'])->name('perizinan.laporan.process');
-        
+
+        // Berita Acara Pemeriksaan
+        Route::get('/perizinan/{id}/berita-acara', [\App\Http\Controllers\PerizinanController::class, 'createBeritaAcara'])->name('perizinan.berita_acara.create');
+        Route::post('/perizinan/{id}/berita-acara', [\App\Http\Controllers\PerizinanController::class, 'storeBeritaAcara'])->name('perizinan.berita_acara.store');
+
+        // Review Dokumen oleh Staff
+        Route::post('/dokumen/{dokumen}/review', [\App\Http\Controllers\PerizinanController::class, 'reviewDokumen'])->name('dokumen.review');
+
+        // Patroli UGB
+        Route::get('/patroli-ugb', [PatroliUgbController::class, 'index'])->name('patroli_ugb.index');
+        Route::get('/patroli-ugb/buat', [PatroliUgbController::class, 'create'])->name('patroli_ugb.create');
+        Route::post('/patroli-ugb', [PatroliUgbController::class, 'store'])->name('patroli_ugb.store');
+        Route::get('/patroli-ugb/{id}/edit', [PatroliUgbController::class, 'edit'])->name('patroli_ugb.edit');
+        Route::put('/patroli-ugb/{id}', [PatroliUgbController::class, 'update'])->name('patroli_ugb.update');
+        Route::get('/patroli-ugb/{id}', [PatroliUgbController::class, 'show'])->name('patroli_ugb.show');
+        Route::get('/patroli-ugb/{id}/surat-tugas', [PatroliUgbController::class, 'suratTugas'])->name('patroli_ugb.surat_tugas');
+
+        // Penyegelan UGB
+        Route::get('/penyegelan-ugb', [PenyegelanUgbController::class, 'index'])->name('penyegelan_ugb.index');
+        Route::get('/penyegelan-ugb/{perizinan_id}', [PenyegelanUgbController::class, 'show'])->name('penyegelan_ugb.show');
+        Route::post('/penyegelan-ugb/{perizinan_id}', [PenyegelanUgbController::class, 'store'])->name('penyegelan_ugb.store');
+
         // Dedicated Role Dashboards
         Route::get('/sekretariat', [\App\Http\Controllers\PerizinanController::class, 'sekretariatDashboard'])->name('sekretariat');
         Route::get('/verifikator', [\App\Http\Controllers\PerizinanController::class, 'verifikatorDashboard'])->name('verifikator');

@@ -35,7 +35,7 @@
                     <!-- Info Banner SOP -->
                     <div class="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 flex items-start justify-between gap-4">
                         <div class="flex gap-3">
-                            <span class="text-lg">📋</span>
+                            <span class="text-lg"><x-heroicon-o-clipboard-document-list class="w-5 h-5 inline-block mr-1" /></span>
                             <div>
                                 <h4 class="text-xs font-bold text-slate-900">Panduan Prosedur Pelaksanaan UGB</h4>
                                 <p class="text-[11px] text-slate-500 mt-0.5">Pastikan Anda memahami tahapan penyegelan alat & saksi yang diwajibkan setelah izin terbit.</p>
@@ -100,61 +100,158 @@
             @elseif($jenis === 'pub')
                 <!-- ================== PUB FIELDS ================== -->
                 <div class="space-y-6">
+                    <!-- Info Banner SOP PUB -->
+                    <div class="p-4 rounded-2xl bg-blue-50 border border-blue-200 flex items-start gap-3">
+                        <span class="text-lg"><x-heroicon-o-clipboard-document-list class="w-5 h-5 inline-block mr-1" /></span>
+                        <div>
+                            <h4 class="text-xs font-bold text-slate-900">SOP Penerbitan Izin & Rekomendasi PUB (9 Langkah)</h4>
+                            <p class="text-[11px] text-slate-500 mt-0.5">Siapkan semua 8 dokumen persyaratan berikut dalam format PDF sebelum mengajukan. Kelengkapan dokumen akan diperiksa oleh Sekretariat.</p>
+                        </div>
+                    </div>
+
+                    <!-- Data Pemohon -->
+                    <div class="border-b border-slate-200 pb-2">
+                        <h3 class="text-sm font-bold text-emerald-600 uppercase tracking-wider">Data Pemohon</h3>
+                    </div>
+
                     <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
                         <div class="space-y-1.5">
-                            <label for="nama_penyelenggara" class="block text-xs font-bold text-slate-300 uppercase tracking-wide">Nama Lembaga Pemohon</label>
+                            <label for="nama_penyelenggara" class="block text-xs font-bold text-slate-600 uppercase tracking-wide">Nama Lembaga Pemohon <span class="text-rose-500">*</span></label>
                             <input type="text" id="nama_penyelenggara" name="nama_penyelenggara" required value="{{ old('nama_penyelenggara') }}"
-                                class="block w-full rounded-xl bg-slate-950 border border-slate-800 px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-emerald-500"
+                                class="block w-full rounded-xl bg-white border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-emerald-500"
                                 placeholder="Yayasan Peduli Sesama">
                         </div>
                         <div class="space-y-1.5">
-                            <label for="tujuan_pengumpulan" class="block text-xs font-bold text-slate-300 uppercase tracking-wide">Tujuan Pengumpulan Sumbangan</label>
+                            <label for="tujuan_pengumpulan" class="block text-xs font-bold text-slate-600 uppercase tracking-wide">Tujuan Pengumpulan Sumbangan <span class="text-rose-500">*</span></label>
                             <input type="text" id="tujuan_pengumpulan" name="tujuan_pengumpulan" required value="{{ old('tujuan_pengumpulan') }}"
-                                class="block w-full rounded-xl bg-slate-950 border border-slate-800 px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-emerald-500"
+                                class="block w-full rounded-xl bg-white border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-emerald-500"
                                 placeholder="Bantuan Korban Gempa & Beasiswa Anak Yatim">
                         </div>
                     </div>
 
                     <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
                         <div class="space-y-1.5">
-                            <label for="metode_pengumpulan" class="block text-xs font-bold text-slate-300 uppercase tracking-wide">Metode Pengumpulan</label>
+                            <label for="metode_pengumpulan" class="block text-xs font-bold text-slate-600 uppercase tracking-wide">Metode Pengumpulan <span class="text-rose-500">*</span></label>
                             <input type="text" id="metode_pengumpulan" name="metode_pengumpulan" required value="{{ old('metode_pengumpulan') }}"
-                                class="block w-full rounded-xl bg-slate-950 border border-slate-800 px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-emerald-500"
+                                class="block w-full rounded-xl bg-white border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-emerald-500"
                                 placeholder="Kotak Amal, Rekening Bank, Crowdfunding Online">
                         </div>
                         <div class="space-y-1.5">
-                            <label for="target_dana" class="block text-xs font-bold text-slate-300 uppercase tracking-wide">Target Nominal Pengumpulan (Rupiah)</label>
+                            <label for="target_dana" class="block text-xs font-bold text-slate-600 uppercase tracking-wide">Target Nominal Pengumpulan (Rupiah) <span class="text-rose-500">*</span></label>
                             <input type="number" id="target_dana" name="target_dana" required value="{{ old('target_dana') }}" min="0"
-                                class="block w-full rounded-xl bg-slate-950 border border-slate-800 px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-emerald-500"
+                                class="block w-full rounded-xl bg-white border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-emerald-500"
                                 placeholder="100000000">
                         </div>
                     </div>
 
                     <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
                         <div class="space-y-1.5">
-                            <label for="wilayah_pengumpulan" class="block text-xs font-bold text-slate-300 uppercase tracking-wide">Sasaran Wilayah Pengumpulan</label>
+                            <label for="wilayah_pengumpulan" class="block text-xs font-bold text-slate-600 uppercase tracking-wide">Sasaran Wilayah Pengumpulan <span class="text-rose-500">*</span></label>
                             <input type="text" id="wilayah_pengumpulan" name="wilayah_pengumpulan" required value="{{ old('wilayah_pengumpulan') }}"
-                                class="block w-full rounded-xl bg-slate-950 border border-slate-800 px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-emerald-500"
+                                class="block w-full rounded-xl bg-white border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-emerald-500"
                                 placeholder="Provinsi Sumatera Utara">
                         </div>
                         <div class="space-y-1.5">
-                            <label for="waktu_pelaksanaan" class="block text-xs font-bold text-slate-300 uppercase tracking-wide">Jangka Waktu Pengumpulan</label>
+                            <label for="waktu_pelaksanaan" class="block text-xs font-bold text-slate-600 uppercase tracking-wide">Jangka Waktu Pengumpulan <span class="text-rose-500">*</span></label>
                             <input type="text" id="waktu_pelaksanaan" name="waktu_pelaksanaan" required value="{{ old('waktu_pelaksanaan') }}"
-                                class="block w-full rounded-xl bg-slate-950 border border-slate-800 px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-emerald-500"
+                                class="block w-full rounded-xl bg-white border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-emerald-500"
                                 placeholder="3 Bulan (1 Agustus - 31 Oktober 2026)">
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 border-t border-slate-900 pt-6">
-                        <div class="space-y-1.5">
-                            <label for="dokumen_proposal" class="block text-xs font-bold text-slate-300 uppercase tracking-wide">Proposal Program PUB (PDF) <span class="text-rose-500">*</span></label>
-                            <input type="file" id="dokumen_proposal" name="dokumen_proposal" required
-                                class="block w-full text-xs text-slate-400 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-slate-900 file:text-slate-200 hover:file:bg-slate-800 cursor-pointer">
+                    <!-- Dokumen Persyaratan PUB (8 dokumen sesuai SOP) -->
+                    <div class="border-b border-slate-200 pb-2 pt-2">
+                        <h3 class="text-sm font-bold text-emerald-600 uppercase tracking-wider">Dokumen Persyaratan PUB</h3>
+                        <p class="text-[11px] text-slate-500 mt-1">Semua dokumen wajib dalam format PDF. Pastikan scan jelas dan terbaca.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
+                        <!-- Dokumen 1 -->
+                        <div class="space-y-1.5 p-4 rounded-xl bg-slate-50 border border-slate-200">
+                            <div class="flex items-center gap-2 mb-1">
+                                <span class="flex items-center justify-center w-5 h-5 rounded-full bg-emerald-100 text-emerald-700 text-[10px] font-bold">1</span>
+                                <label for="akta_notaris" class="block text-xs font-bold text-slate-700">Akta Notaris <span class="text-rose-500">*</span></label>
+                            </div>
+                            <input type="file" id="akta_notaris" name="akta_notaris" required accept=".pdf"
+                                class="block w-full text-xs text-slate-500 file:mr-3 file:py-2 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100 cursor-pointer">
+                            <p class="text-[10px] text-slate-400">Akta pendirian yayasan/lembaga</p>
                         </div>
-                        <div class="space-y-1.5">
-                            <label for="dokumen_rekening" class="block text-xs font-bold text-slate-300 uppercase tracking-wide">Buku Tabungan / Rekening Lembaga (PDF/Gambar) <span class="text-rose-500">*</span></label>
-                            <input type="file" id="dokumen_rekening" name="dokumen_rekening" required
-                                class="block w-full text-xs text-slate-400 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-slate-900 file:text-slate-200 hover:file:bg-slate-800 cursor-pointer">
+
+                        <!-- Dokumen 2 -->
+                        <div class="space-y-1.5 p-4 rounded-xl bg-slate-50 border border-slate-200">
+                            <div class="flex items-center gap-2 mb-1">
+                                <span class="flex items-center justify-center w-5 h-5 rounded-full bg-emerald-100 text-emerald-700 text-[10px] font-bold">2</span>
+                                <label for="sk_kemenkumham" class="block text-xs font-bold text-slate-700">SK Kemenkumham <span class="text-rose-500">*</span></label>
+                            </div>
+                            <input type="file" id="sk_kemenkumham" name="sk_kemenkumham" required accept=".pdf"
+                                class="block w-full text-xs text-slate-500 file:mr-3 file:py-2 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100 cursor-pointer">
+                            <p class="text-[10px] text-slate-400">SK pengesahan dari Kemenkumham</p>
+                        </div>
+
+                        <!-- Dokumen 3 -->
+                        <div class="space-y-1.5 p-4 rounded-xl bg-slate-50 border border-slate-200">
+                            <div class="flex items-center gap-2 mb-1">
+                                <span class="flex items-center justify-center w-5 h-5 rounded-full bg-emerald-100 text-emerald-700 text-[10px] font-bold">3</span>
+                                <label for="surat_domisili" class="block text-xs font-bold text-slate-700">Scan Surat Domisili Yayasan <span class="text-rose-500">*</span></label>
+                            </div>
+                            <input type="file" id="surat_domisili" name="surat_domisili" required accept=".pdf"
+                                class="block w-full text-xs text-slate-500 file:mr-3 file:py-2 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100 cursor-pointer">
+                            <p class="text-[10px] text-slate-400">Surat keterangan domisili dari kelurahan</p>
+                        </div>
+
+                        <!-- Dokumen 4 -->
+                        <div class="space-y-1.5 p-4 rounded-xl bg-slate-50 border border-slate-200">
+                            <div class="flex items-center gap-2 mb-1">
+                                <span class="flex items-center justify-center w-5 h-5 rounded-full bg-emerald-100 text-emerald-700 text-[10px] font-bold">4</span>
+                                <label for="stp_stpu" class="block text-xs font-bold text-slate-700">Scan STP/STPU <span class="text-rose-500">*</span></label>
+                            </div>
+                            <input type="file" id="stp_stpu" name="stp_stpu" required accept=".pdf"
+                                class="block w-full text-xs text-slate-500 file:mr-3 file:py-2 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100 cursor-pointer">
+                            <p class="text-[10px] text-slate-400">Surat Tanda Pendaftaran / STPU yang masih berlaku</p>
+                        </div>
+
+                        <!-- Dokumen 5 -->
+                        <div class="space-y-1.5 p-4 rounded-xl bg-slate-50 border border-slate-200">
+                            <div class="flex items-center gap-2 mb-1">
+                                <span class="flex items-center justify-center w-5 h-5 rounded-full bg-emerald-100 text-emerald-700 text-[10px] font-bold">5</span>
+                                <label for="surat_ket_baik_pengurus" class="block text-xs font-bold text-slate-700">Surat Ket. Baik Pengurus dari Kepolisian <span class="text-rose-500">*</span></label>
+                            </div>
+                            <input type="file" id="surat_ket_baik_pengurus" name="surat_ket_baik_pengurus" required accept=".pdf"
+                                class="block w-full text-xs text-slate-500 file:mr-3 file:py-2 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100 cursor-pointer">
+                            <p class="text-[10px] text-slate-400">Dari Polres setempat untuk seluruh pengurus</p>
+                        </div>
+
+                        <!-- Dokumen 6 -->
+                        <div class="space-y-1.5 p-4 rounded-xl bg-slate-50 border border-slate-200">
+                            <div class="flex items-center gap-2 mb-1">
+                                <span class="flex items-center justify-center w-5 h-5 rounded-full bg-emerald-100 text-emerald-700 text-[10px] font-bold">6</span>
+                                <label for="pernyataan_keabsahan" class="block text-xs font-bold text-slate-700">Surat Pernyataan Keabsahan Dokumen bermaterai <span class="text-rose-500">*</span></label>
+                            </div>
+                            <input type="file" id="pernyataan_keabsahan" name="pernyataan_keabsahan" required accept=".pdf"
+                                class="block w-full text-xs text-slate-500 file:mr-3 file:py-2 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100 cursor-pointer">
+                            <p class="text-[10px] text-slate-400">Wajib ditandatangani di atas materai Rp10.000</p>
+                        </div>
+
+                        <!-- Dokumen 7 -->
+                        <div class="space-y-1.5 p-4 rounded-xl bg-slate-50 border border-slate-200">
+                            <div class="flex items-center gap-2 mb-1">
+                                <span class="flex items-center justify-center w-5 h-5 rounded-full bg-emerald-100 text-emerald-700 text-[10px] font-bold">7</span>
+                                <label for="pernyataan_anti_radikal" class="block text-xs font-bold text-slate-700">Surat Pernyataan Anti-Radikalisme bermaterai <span class="text-rose-500">*</span></label>
+                            </div>
+                            <input type="file" id="pernyataan_anti_radikal" name="pernyataan_anti_radikal" required accept=".pdf"
+                                class="block w-full text-xs text-slate-500 file:mr-3 file:py-2 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100 cursor-pointer">
+                            <p class="text-[10px] text-slate-400">Pernyataan kegiatan tidak untuk radikalisme/terorisme</p>
+                        </div>
+
+                        <!-- Dokumen 8 -->
+                        <div class="space-y-1.5 p-4 rounded-xl bg-slate-50 border border-slate-200">
+                            <div class="flex items-center gap-2 mb-1">
+                                <span class="flex items-center justify-center w-5 h-5 rounded-full bg-emerald-100 text-emerald-700 text-[10px] font-bold">8</span>
+                                <label for="rekomendasi_dinsos_kab" class="block text-xs font-bold text-slate-700">Rekomendasi Dinas Sosial Kab/Kota <span class="text-rose-500">*</span></label>
+                            </div>
+                            <input type="file" id="rekomendasi_dinsos_kab" name="rekomendasi_dinsos_kab" required accept=".pdf"
+                                class="block w-full text-xs text-slate-500 file:mr-3 file:py-2 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100 cursor-pointer">
+                            <p class="text-[10px] text-slate-400">Surat rekomendasi dari Dinsos Kabupaten/Kota domisili</p>
                         </div>
                     </div>
                 </div>

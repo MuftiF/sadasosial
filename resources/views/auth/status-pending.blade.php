@@ -6,7 +6,7 @@
 <div class="mx-auto max-w-2xl px-4 py-16 sm:py-24 lg:px-8 flex flex-col items-center">
     <div class="glass-panel rounded-3xl p-8 sm:p-12 text-center glow-indigo w-full border border-indigo-500/20">
         <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-amber-500/10 text-amber-400 text-3xl mb-6">
-            ⏳
+            <x-heroicon-o-clock class="w-5 h-5 inline-block mr-1" />
         </div>
         
         <h1 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight mb-4">Pendaftaran Sedang Ditinjau</h1>

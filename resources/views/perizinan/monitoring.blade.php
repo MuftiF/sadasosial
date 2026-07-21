@@ -27,7 +27,7 @@
         <div class="glass-panel rounded-2xl p-6 glow-amber">
             <div class="flex justify-between items-start mb-2">
                 <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Akan Berakhir (30 Hari)</span>
-                <span class="text-amber-400 text-sm">⚠️</span>
+                <span class="text-amber-400 text-sm"><x-heroicon-o-exclamation-triangle class="w-5 h-5 inline-block mr-1" /></span>
             </div>
             <h3 class="text-2xl font-black text-white">{{ $stats['total_expiring'] }}</h3>
             <p class="text-[10px] text-amber-500 font-semibold mt-1">Perlu pemberitahuan perpanjangan</p>

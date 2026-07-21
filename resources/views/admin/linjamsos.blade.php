@@ -58,7 +58,7 @@
                             </td>
                             <td class="px-6 py-4 text-right">
                                 <a href="{{ route('perizinan.show', $q->id) }}" class="inline-flex items-center justify-center rounded-lg bg-emerald-600/15 border border-emerald-500/25 px-4 py-2 text-xs font-bold text-emerald-600 hover:bg-emerald-600 hover:text-white transition">
-                                    🔑 Ulas &amp; Proses
+                                    <x-heroicon-o-key class="w-5 h-5 inline-block mr-1" /> Ulas &amp; Proses
                                 </a>
                             </td>
                         </tr>

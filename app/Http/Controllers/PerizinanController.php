@@ -4,11 +4,14 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Perizinan;
+use App\Models\PerizinanDokumen;
+use App\Models\BeritaAcara;
 use App\Models\User;
 use App\Models\AccessAuditLog;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class PerizinanController extends Controller
 {
@@ -97,14 +100,21 @@ class PerizinanController extends Controller
             ];
         } elseif ($jenis === 'pub') {
             $rules += [
-                'nama_penyelenggara' => 'required|string|max:255',
-                'tujuan_pengumpulan' => 'required|string|max:255',
-                'metode_pengumpulan' => 'required|string|max:255',
-                'target_dana' => 'required|numeric|min:0',
-                'wilayah_pengumpulan' => 'required|string|max:255',
-                'waktu_pelaksanaan' => 'required|string|max:255',
-                'dokumen_proposal' => 'required|file|mimes:pdf,docx,jpg,png|max:5120',
-                'dokumen_rekening' => 'required|file|mimes:pdf,jpg,png|max:5120',
+                'nama_penyelenggara'       => 'required|string|max:255',
+                'tujuan_pengumpulan'       => 'required|string|max:255',
+                'metode_pengumpulan'       => 'required|string|max:255',
+                'target_dana'              => 'required|numeric|min:0',
+                'wilayah_pengumpulan'      => 'required|string|max:255',
+                'waktu_pelaksanaan'        => 'required|string|max:255',
+                // 8 dokumen wajib SOP PUB
+                'akta_notaris'             => 'required|file|mimes:pdf|max:10240',
+                'sk_kemenkumham'           => 'required|file|mimes:pdf|max:10240',
+                'surat_domisili'           => 'required|file|mimes:pdf|max:10240',
+                'stp_stpu'                 => 'required|file|mimes:pdf|max:10240',
+                'surat_ket_baik_pengurus'  => 'required|file|mimes:pdf|max:10240',
+                'pernyataan_keabsahan'     => 'required|file|mimes:pdf|max:10240',
+                'pernyataan_anti_radikal'  => 'required|file|mimes:pdf|max:10240',
+                'rekomendasi_dinsos_kab'   => 'required|file|mimes:pdf|max:10240',
             ];
         } elseif ($jenis === 'lks') {
             $rules += [
@@ -147,10 +157,17 @@ class PerizinanController extends Controller
         // Upload files
         $fileFields = [];
         if ($jenis === 'ugb') { $fileFields = ['dokumen_proposal', 'dokumen_hadiah']; }
-        elseif ($jenis === 'pub') { $fileFields = ['dokumen_proposal', 'dokumen_rekening']; }
+        elseif ($jenis === 'pub') {
+            $fileFields = [
+                'akta_notaris', 'sk_kemenkumham', 'surat_domisili', 'stp_stpu',
+                'surat_ket_baik_pengurus', 'pernyataan_keabsahan',
+                'pernyataan_anti_radikal', 'rekomendasi_dinsos_kab',
+            ];
+        }
         elseif ($jenis === 'lks') { $fileFields = ['dokumen_akta', 'dokumen_domisili']; }
         elseif ($jenis === 'adopsi') { $fileFields = ['dokumen_nikah', 'dokumen_sehat']; }
 
+        $namaLabels = PerizinanDokumen::namaLabel();
         foreach ($fileFields as $field) {
             if ($request->hasFile($field)) {
                 $path = $request->file($field)->store('dokumen_perizinan', 'public');
@@ -274,14 +291,21 @@ class PerizinanController extends Controller
             ];
         } elseif ($jenis === 'pub') {
             $rules += [
-                'nama_penyelenggara' => 'required|string|max:255',
-                'tujuan_pengumpulan' => 'required|string|max:255',
-                'metode_pengumpulan' => 'required|string|max:255',
-                'target_dana' => 'required|numeric|min:0',
-                'wilayah_pengumpulan' => 'required|string|max:255',
-                'waktu_pelaksanaan' => 'required|string|max:255',
-                'dokumen_proposal' => 'nullable|file|mimes:pdf,docx,jpg,png|max:5120',
-                'dokumen_rekening' => 'nullable|file|mimes:pdf,jpg,png|max:5120',
+                'nama_penyelenggara'       => 'required|string|max:255',
+                'tujuan_pengumpulan'       => 'required|string|max:255',
+                'metode_pengumpulan'       => 'required|string|max:255',
+                'target_dana'              => 'required|numeric|min:0',
+                'wilayah_pengumpulan'      => 'required|string|max:255',
+                'waktu_pelaksanaan'        => 'required|string|max:255',
+                // 8 dokumen SOP PUB (nullable saat edit/perbaikan)
+                'akta_notaris'             => 'nullable|file|mimes:pdf|max:10240',
+                'sk_kemenkumham'           => 'nullable|file|mimes:pdf|max:10240',
+                'surat_domisili'           => 'nullable|file|mimes:pdf|max:10240',
+                'stp_stpu'                 => 'nullable|file|mimes:pdf|max:10240',
+                'surat_ket_baik_pengurus'  => 'nullable|file|mimes:pdf|max:10240',
+                'pernyataan_keabsahan'     => 'nullable|file|mimes:pdf|max:10240',
+                'pernyataan_anti_radikal'  => 'nullable|file|mimes:pdf|max:10240',
+                'rekomendasi_dinsos_kab'   => 'nullable|file|mimes:pdf|max:10240',
             ];
         } elseif ($jenis === 'lks') {
             $rules += [
@@ -326,6 +350,15 @@ class PerizinanController extends Controller
         elseif ($jenis === 'pub') { $fileFields = ['dokumen_proposal', 'dokumen_rekening']; }
         elseif ($jenis === 'lks') { $fileFields = ['dokumen_akta', 'dokumen_domisili']; }
         elseif ($jenis === 'adopsi') { $fileFields = ['dokumen_nikah', 'dokumen_sehat']; }
+
+        // Update file fields for edit/perbaikan PUB
+        if ($jenis === 'pub') {
+            $fileFields = [
+                'akta_notaris', 'sk_kemenkumham', 'surat_domisili', 'stp_stpu',
+                'surat_ket_baik_pengurus', 'pernyataan_keabsahan',
+                'pernyataan_anti_radikal', 'rekomendasi_dinsos_kab',
+            ];
+        }
 
         $mainDocPath = $perizinan->dokumen;
         foreach ($fileFields as $field) {
@@ -723,7 +756,12 @@ class PerizinanController extends Controller
             'adopsi' => 'Rekomendasi Pengangkatan / Adopsi Anak',
         ];
 
-        return view('perizinan.cetak', compact('perizinan', 'jenisLabels'));
+        $pdf = Pdf::loadView('perizinan.pdf', compact('perizinan', 'jenisLabels'));
+        
+        // Atur ukuran kertas
+        $pdf->setPaper('A4', 'portrait');
+
+        return $pdf->stream('Izin_SADA_SOSIAL_' . $perizinan->nomor_izin . '.pdf');
     }
 
     /**
@@ -977,6 +1015,181 @@ class PerizinanController extends Controller
         }
         $queues = Perizinan::where('tahap_verifikasi', 'kepala_dinas')->where('status', 'diperiksa')->with('pemohon')->latest()->get();
         return view('admin.kadinas', compact('user', 'queues'));
+    }
+
+    /**
+     * Upload dokumen ke tabel perizinan_dokumen.
+     * POST /perizinan/{id}/dokumen
+     */
+    public function uploadDokumen(Request $request, $id)
+    {
+        $perizinan = Perizinan::findOrFail($id);
+        $user = Auth::user();
+
+        if ($perizinan->pemohon_id !== $user->id && !$user->isStaff()) {
+            abort(403, 'Akses tidak sah.');
+        }
+
+        $request->validate([
+            'jenis_dokumen' => 'required|string|max:100',
+            'file_dokumen'  => 'required|file|mimes:pdf|max:10240',
+        ]);
+
+        $path = $request->file('file_dokumen')->store('dokumen_perizinan/'. $id, 'public');
+        $namaLabels = PerizinanDokumen::namaLabel();
+
+        PerizinanDokumen::create([
+            'perizinan_id'  => $perizinan->id,
+            'jenis_dokumen' => $request->jenis_dokumen,
+            'nama_dokumen'  => $namaLabels[$request->jenis_dokumen] ?? $request->jenis_dokumen,
+            'file_path'     => $path,
+            'status'        => 'uploaded',
+            'uploaded_by'   => $user->id,
+        ]);
+
+        return redirect()->back()->with('success', 'Dokumen berhasil diunggah.');
+    }
+
+    /**
+     * Daftar dokumen untuk satu permohonan.
+     * GET /perizinan/{id}/dokumen
+     */
+    public function getDokumenList($id)
+    {
+        $perizinan = Perizinan::with(['pemohon'])->findOrFail($id);
+        $user = Auth::user();
+
+        if ($perizinan->pemohon_id !== $user->id && !$user->isStaff()) {
+            abort(403, 'Akses tidak sah.');
+        }
+
+        $dokumens = PerizinanDokumen::where('perizinan_id', $id)->with(['uploader', 'reviewer'])->get();
+        $namaLabels = PerizinanDokumen::namaLabel();
+
+        return view('perizinan.dokumen_list', compact('perizinan', 'dokumens', 'namaLabels', 'user'));
+    }
+
+    /**
+     * Verifikasi / Review satu dokumen oleh staff.
+     * POST /admin/dokumen/{dokumen}/review
+     */
+    public function reviewDokumen(Request $request, $dokumenId)
+    {
+        $user = Auth::user();
+        if (!$user->isStaff()) {
+            abort(403, 'Akses tidak sah.');
+        }
+
+        $dokumen = PerizinanDokumen::findOrFail($dokumenId);
+
+        $request->validate([
+            'status'  => 'required|in:verified,rejected',
+            'catatan' => 'nullable|string|max:500',
+        ]);
+
+        $dokumen->update([
+            'status'      => $request->status,
+            'catatan'     => $request->catatan,
+            'reviewed_by' => $user->id,
+            'reviewed_at' => now(),
+        ]);
+
+        $msg = $request->status === 'verified' ? 'Dokumen diverifikasi.' : 'Dokumen ditolak, pemohon perlu mengganti.';
+        return redirect()->back()->with('success', $msg);
+    }
+
+    /**
+     * Form Berita Acara Pemeriksaan.
+     * GET /perizinan/{id}/berita-acara
+     */
+    public function createBeritaAcara($id)
+    {
+        $user = Auth::user();
+        if (!$user->isStaff()) {
+            abort(403, 'Akses tidak sah.');
+        }
+
+        $perizinan = Perizinan::with(['pemohon'])->findOrFail($id);
+        $beritaAcara = BeritaAcara::where('perizinan_id', $id)
+            ->with('petugas')
+            ->latest()
+            ->get();
+
+        return view('perizinan.berita_acara_form', compact('perizinan', 'beritaAcara', 'user'));
+    }
+
+    /**
+     * Simpan Berita Acara Pemeriksaan.
+     * POST /perizinan/{id}/berita-acara
+     */
+    public function storeBeritaAcara(Request $request, $id)
+    {
+        $user = Auth::user();
+        if (!$user->isStaff()) {
+            abort(403, 'Akses tidak sah.');
+        }
+
+        $perizinan = Perizinan::findOrFail($id);
+
+        $validated = $request->validate([
+            'tanggal_pemeriksaan'  => 'required|date',
+            'jenis_pemeriksaan'    => 'required|in:lapangan,dokumen,virtual',
+            'hasil_pemeriksaan'    => 'required|string',
+            'rekomendasi'          => 'required|in:terbitkan,tolak,perbaikan',
+            'catatan_tambahan'     => 'nullable|string|max:2000',
+            'nama_penandatangan'   => 'required|string|max:255',
+            'nip_penandatangan'    => 'required|string|max:50',
+            'jabatan_penandatangan'=> 'required|string|max:255',
+            'status'               => 'required|in:draft,final',
+            // Checklist lapangan (opsional)
+            'checklist'            => 'nullable|array',
+        ]);
+
+        $tandaTangan = [
+            'nama'      => $validated['nama_penandatangan'],
+            'nip'       => $validated['nip_penandatangan'],
+            'jabatan'   => $validated['jabatan_penandatangan'],
+            'timestamp' => now()->toIso8601String(),
+        ];
+
+        $ba = BeritaAcara::create([
+            'perizinan_id'       => $perizinan->id,
+            'petugas_id'         => $user->id,
+            'tanggal_pemeriksaan'=> $validated['tanggal_pemeriksaan'],
+            'jenis_pemeriksaan'  => $validated['jenis_pemeriksaan'],
+            'hasil_pemeriksaan'  => $validated['hasil_pemeriksaan'],
+            'rekomendasi'        => $validated['rekomendasi'],
+            'catatan_tambahan'   => $validated['catatan_tambahan'] ?? null,
+            'tanda_tangan'       => $tandaTangan,
+            'status'             => $validated['status'],
+            'checklist_lapangan' => $request->checklist ?? null,
+        ]);
+
+        // Jika final, catat di history perizinan
+        if ($validated['status'] === 'final') {
+            $history = $perizinan->history_status ?? [];
+            $history[] = [
+                'tahap'  => 'Berita Acara Pemeriksaan',
+                'oleh'   => $user->name,
+                'role'   => $this->getRoleLabel($user->role),
+                'status' => 'BA-' . strtoupper($validated['rekomendasi']),
+                'catatan'=> 'Berita Acara resmi dibuat. Rekomendasi: ' . ucfirst($validated['rekomendasi']) . '. ' . ($validated['catatan_tambahan'] ?? ''),
+                'waktu'  => now()->format('Y-m-d H:i:s'),
+            ];
+            $perizinan->update(['history_status' => $history]);
+        }
+
+        AccessAuditLog::create([
+            'admin_id'       => $user->id,
+            'target_user_id' => $perizinan->pemohon_id,
+            'action'         => 'buat_berita_acara',
+            'details'        => "Petugas {$user->name} membuat Berita Acara untuk perizinan #{$perizinan->id}. Rekomendasi: {$validated['rekomendasi']}.",
+            'ip_address'     => $request->ip(),
+            'user_agent'     => $request->userAgent(),
+        ]);
+
+        return redirect()->route('perizinan.berita_acara.create', $perizinan->id)
+            ->with('success', 'Berita Acara berhasil disimpan.');
     }
 
     /**

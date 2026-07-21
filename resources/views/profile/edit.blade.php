@@ -13,7 +13,7 @@
     @if($pendingRequest)
         <div class="mb-8 p-5 rounded-2xl border border-amber-500/30 bg-amber-500/5 flex gap-4 items-start">
             <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-amber-500/10 text-amber-400 text-lg">
-                ⏳
+                <x-heroicon-o-clock class="w-5 h-5 inline-block mr-1" />
             </span>
             <div>
                 <h4 class="text-sm font-bold text-amber-400">Pengajuan Perubahan Profil Sedang Ditinjau</h4>

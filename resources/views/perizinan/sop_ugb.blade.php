@@ -18,11 +18,11 @@
         <div class="flex p-1 bg-slate-200/80 rounded-2xl border border-slate-300/40">
             <button onclick="switchTab('pelaksanaan')" id="tab-pelaksanaan" 
                 class="px-5 py-2 text-xs font-bold rounded-xl transition duration-200 shadow-sm bg-white text-slate-900">
-                🗳️ SOP Pelaksanaan Pengundian
+                <x-heroicon-o-inbox-stack class="w-5 h-5 inline-block mr-1" /> SOP Pelaksanaan Pengundian
             </button>
             <button onclick="switchTab('pengawasan')" id="tab-pengawasan" 
                 class="px-5 py-2 text-xs font-bold rounded-xl transition duration-200 text-slate-500 hover:text-slate-900">
-                🔍 SOP Patroli Pengawasan
+                <x-heroicon-o-magnifying-glass class="w-5 h-5 inline-block mr-1" /> SOP Patroli Pengawasan
             </button>
         </div>
     </div>
@@ -167,7 +167,7 @@
                             <div class="flex flex-wrap items-center justify-between gap-3 mb-3">
                                 <div class="flex items-center gap-1.5">
                                     <h3 class="text-sm font-bold text-slate-900">Mengecek Alat & Sarana Prasarana Undian</h3>
-                                    <span class="text-xs text-amber-600 font-bold">⚠️ Titik Keputusan</span>
+                                    <span class="text-xs text-amber-600 font-bold"><x-heroicon-o-exclamation-triangle class="w-5 h-5 inline-block mr-1" /> Titik Keputusan</span>
                                 </div>
                                 <span class="px-2.5 py-0.5 text-[10px] font-bold bg-blue-100 text-blue-800 rounded-full">Petugas Saksi & Pengawas</span>
                             </div>
@@ -214,7 +214,7 @@
                             <div class="flex flex-wrap items-center justify-between gap-3 mb-3">
                                 <div class="flex items-center gap-1.5">
                                     <h3 class="text-sm font-bold text-slate-900">Melakukan Uji Coba Alat Pengundian</h3>
-                                    <span class="text-xs text-amber-600 font-bold">⚠️ Titik Keputusan</span>
+                                    <span class="text-xs text-amber-600 font-bold"><x-heroicon-o-exclamation-triangle class="w-5 h-5 inline-block mr-1" /> Titik Keputusan</span>
                                 </div>
                                 <span class="px-2.5 py-0.5 text-[10px] font-bold bg-blue-100 text-blue-800 rounded-full">Petugas Saksi & Pengawas</span>
                             </div>
@@ -370,7 +370,7 @@
             <!-- Informational Sidebar Right -->
             <div class="lg:col-span-4 space-y-6">
                 <div class="glass-panel rounded-3xl p-6">
-                    <h3 class="font-extrabold text-slate-900 text-sm border-b border-slate-200 pb-3 mb-4">🔑 Ringkasan Mutu Baku</h3>
+                    <h3 class="font-extrabold text-slate-900 text-sm border-b border-slate-200 pb-3 mb-4"><x-heroicon-o-key class="w-5 h-5 inline-block mr-1" /> Ringkasan Mutu Baku</h3>
                     <div class="space-y-4 text-xs">
                         <div class="flex justify-between items-center border-b border-slate-100 pb-2">
                             <span class="text-slate-500">Total Waktu Prosedur</span>
@@ -595,7 +595,7 @@
             <!-- Informational Sidebar Right -->
             <div class="lg:col-span-4 space-y-6">
                 <div class="glass-panel rounded-3xl p-6">
-                    <h3 class="font-extrabold text-slate-900 text-sm border-b border-slate-200 pb-3 mb-4">🔑 Ringkasan Patroli</h3>
+                    <h3 class="font-extrabold text-slate-900 text-sm border-b border-slate-200 pb-3 mb-4"><x-heroicon-o-key class="w-5 h-5 inline-block mr-1" /> Ringkasan Patroli</h3>
                     <div class="space-y-4 text-xs">
                         <div class="flex justify-between items-center border-b border-slate-100 pb-2">
                             <span class="text-slate-500">Total Waktu Prosedur</span>
@@ -619,7 +619,7 @@
                     </p>
                     <ul class="text-[11px] text-slate-600 space-y-1.5 mt-3">
                         <li class="flex items-center gap-1.5">🛑 Pembekuan izin promosi</li>
-                        <li class="flex items-center gap-1.5">⚠️ Teguran tertulis &amp; denda administratif</li>
+                        <li class="flex items-center gap-1.5"><x-heroicon-o-exclamation-triangle class="w-5 h-5 inline-block mr-1" /> Teguran tertulis &amp; denda administratif</li>
                         <li class="flex items-center gap-1.5">🚫 Blacklist pendaftaran UGB selanjutnya</li>
                     </ul>
                 </div>

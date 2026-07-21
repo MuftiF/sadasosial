@@ -248,7 +248,7 @@
     <!-- Printable Header Bar -->
     <div class="no-print-bar">
         <span>Dokumen ini diterbitkan secara sah dan terekam di sistem digital.</span>
-        <button onclick="window.print()" class="btn-print">🖨️ Cetak Dokumen</button>
+        <button onclick="window.print()" class="btn-print"><x-heroicon-o-printer class="w-4 h-4 inline-block mr-1" /> Cetak Dokumen</button>
     </div>
 
     <!-- Official Certificate / Document Sheet -->
@@ -257,7 +257,7 @@
         <!-- Kop Surat -->
         <div class="kop-surat">
             <div class="kop-logo">
-                🛡️
+                <x-heroicon-o-shield-check class="w-5 h-5 inline-block mr-1" />
             </div>
             <div class="kop-text">
                 <h2>Pemerintah Provinsi Sumatera Utara</h2>

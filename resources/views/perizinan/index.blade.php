@@ -24,28 +24,28 @@
         <div class="glass-panel rounded-2xl p-6">
             <div class="flex justify-between items-start mb-2">
                 <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Total Permohonan</span>
-                <span class="text-slate-400">📄</span>
+                <span class="text-slate-400"><x-heroicon-o-document-text class="w-4 h-4 inline-block mr-1" /></span>
             </div>
             <h3 class="text-2xl font-black text-white">{{ $perizinans->count() }}</h3>
         </div>
         <div class="glass-panel rounded-2xl p-6">
             <div class="flex justify-between items-start mb-2">
                 <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Sedang Diproses</span>
-                <span class="text-blue-400">⏳</span>
+                <span class="text-blue-400"><x-heroicon-o-clock class="w-5 h-5 inline-block mr-1" /></span>
             </div>
             <h3 class="text-2xl font-black text-white">{{ $perizinans->where('status', 'diperiksa')->count() }}</h3>
         </div>
         <div class="glass-panel rounded-2xl p-6">
             <div class="flex justify-between items-start mb-2">
                 <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Telah Terbit</span>
-                <span class="text-emerald-400">✅</span>
+                <span class="text-emerald-400"><x-heroicon-o-check-circle class="w-5 h-5 inline-block mr-1" /></span>
             </div>
             <h3 class="text-2xl font-black text-white">{{ $perizinans->where('status', 'selesai')->count() }}</h3>
         </div>
         <div class="glass-panel rounded-2xl p-6">
             <div class="flex justify-between items-start mb-2">
                 <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Butuh Perbaikan</span>
-                <span class="text-amber-400">⚠️</span>
+                <span class="text-amber-400"><x-heroicon-o-exclamation-triangle class="w-5 h-5 inline-block mr-1" /></span>
             </div>
             <h3 class="text-2xl font-black text-white">{{ $perizinans->where('perlu_perbaikan', true)->count() }}</h3>
         </div>
@@ -117,7 +117,7 @@
                                             @endif
                                         </span>
                                         @if($p->perlu_perbaikan)
-                                            <span class="text-[10px] text-amber-400 font-medium mt-0.5">⚠️ Perlu Perbaikan Dokumen</span>
+                                            <span class="text-[10px] text-amber-400 font-medium mt-0.5"><x-heroicon-o-exclamation-triangle class="w-5 h-5 inline-block mr-1" /> Perlu Perbaikan Dokumen</span>
                                         @else
                                             <span class="text-[10px] text-slate-400 font-medium mt-0.5">Menunggu Ulasan Petugas</span>
                                         @endif
