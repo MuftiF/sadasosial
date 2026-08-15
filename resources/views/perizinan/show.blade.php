@@ -74,6 +74,20 @@
                         <span class="text-[10px] text-slate-500 uppercase tracking-wide font-bold">Jenis Layanan</span>
                         <p class="text-sm font-bold text-slate-200 mt-0.5">{{ $jenisLabels[$perizinan->jenis_layanan] }}</p>
                     </div>
+                    <div>
+                        <span class="text-[10px] text-slate-500 uppercase tracking-wide font-bold">Tanggal Diajukan</span>
+                        <p class="text-sm font-bold text-slate-200 mt-0.5">
+                            <time
+                                id="show-live-ts"
+                                class="live-ts"
+                                data-timestamp="{{ $perizinan->created_at->toIso8601String() }}"
+                                title="{{ $perizinan->created_at->setTimezone('Asia/Jakarta')->format('d M Y, H:i:s') }} WIB"
+                            ></time>
+                        </p>
+                        <p class="text-[10px] text-slate-500 mt-0.5">
+                            {{ $perizinan->created_at->setTimezone('Asia/Jakarta')->format('d M Y, H:i') }} WIB
+                        </p>
+                    </div>
                     @if($perizinan->nomor_izin)
                         <div>
                             <span class="text-[10px] text-slate-500 uppercase tracking-wide font-bold">Nomor Dokumen Resmi</span>
@@ -238,13 +252,17 @@
                             $fileSize = $fileExists ? round(Storage::disk('public')->size($filePath) / 1024, 1) . ' KB' : null;
                             $isImage = in_array($fileExt, ['jpg', 'jpeg', 'png', 'webp']);
                             $isPdf = $fileExt === 'pdf';
-                            $fileIcon = $isPdf ? '<x-heroicon-o-document-text class="w-4 h-4 inline-block mr-1" />' : ($isImage ? '<x-heroicon-o-photo class="w-5 h-5 inline-block mr-1" />' : '<x-heroicon-o-folder class="w-4 h-4 inline-block mr-1" />');
+                            $fileIcon = $isPdf
+                                ? '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 inline-block mr-1"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" /></svg>'
+                                : ($isImage
+                                    ? '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 inline-block mr-1"><path stroke-linecap="round" stroke-linejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" /></svg>'
+                                    : '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 inline-block mr-1"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12.75V12A2.25 2.25 0 0 1 4.5 9.75h15A2.25 2.25 0 0 1 21.75 12v.75m-8.69-6.44-2.12-2.12a1.5 1.5 0 0 0-1.061-.44H4.5A2.25 2.25 0 0 0 2.25 6v12a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9a2.25 2.25 0 0 0-2.25-2.25h-5.379a1.5 1.5 0 0 1-1.06-.44Z" /></svg>');
                             $fileUrl = $filePath ? Storage::url($filePath) : null;
                         @endphp
                         <div class="rounded-2xl bg-slate-950/40 border border-slate-900 overflow-hidden">
                             <div class="flex items-center justify-between p-3.5 gap-3">
                                 <div class="flex items-center gap-3 min-w-0">
-                                    <span class="text-xl flex-shrink-0">{{ $fileIcon }}</span>
+                                    <span class="text-xl flex-shrink-0 text-slate-400">{!! $fileIcon !!}</span>
                                     <div class="min-w-0">
                                         <h5 class="text-xs font-bold text-slate-300">{{ $label }}</h5>
                                         @if($filePath)
@@ -425,7 +443,11 @@
                             @else
                                 {{-- Belum kirim atau perlu perbaikan — tampilkan tombol --}}
                                 <a href="{{ route('perizinan.laporan.form', $perizinan->id) }}" class="w-full inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-emerald-500 to-teal-400 py-2.5 text-xs font-bold text-slate-950 shadow-md hover:opacity-90 hover:scale-[1.01] transition-all duration-200">
-                                    {{ $perizinan->laporan_status === 'perlu_perbaikan' ? '<x-heroicon-o-pencil class="w-4 h-4 inline-block mr-1" /> Perbaiki Laporan Pelaksanaan' : '<x-heroicon-o-arrow-up-tray class="w-5 h-5 inline-block mr-1" /> Kirim Laporan Pelaksanaan UGB' }}
+                                    @if($perizinan->laporan_status === 'perlu_perbaikan')
+                                        <x-heroicon-o-pencil class="w-4 h-4 inline-block mr-1" /> Perbaiki Laporan Pelaksanaan
+                                    @else
+                                        <x-heroicon-o-arrow-up-tray class="w-5 h-5 inline-block mr-1" /> Kirim Laporan Pelaksanaan UGB
+                                    @endif
                                 </a>
                             @endif
                         </div>
@@ -646,6 +668,41 @@
             }
         }
         updateSopProgress();
+
+        // ── Live timestamp ──────────────────────────────────────────────
+        const WIB_OFFSET = 7 * 3600;
+
+        function timeAgo(isoString) {
+            const past = new Date(isoString);
+            const now  = new Date();
+            const diff = Math.floor((now - past) / 1000);
+
+            if (diff < 5)  return 'baru saja';
+            if (diff < 60) return diff + ' detik yang lalu';
+
+            const mins = Math.floor(diff / 60);
+            if (mins < 60) return mins + ' menit yang lalu';
+
+            const hours = Math.floor(mins / 60);
+            if (hours < 24) return hours + ' jam yang lalu';
+
+            const days = Math.floor(hours / 24);
+            if (days < 7)  return days + ' hari yang lalu';
+
+            const wib = new Date(past.getTime() + WIB_OFFSET * 1000);
+            const months = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+            return wib.getUTCDate() + ' ' + months[wib.getUTCMonth()] + ' ' + wib.getUTCFullYear();
+        }
+
+        function refreshTimestamps() {
+            document.querySelectorAll('time.live-ts').forEach(function(el) {
+                el.textContent = timeAgo(el.dataset.timestamp);
+            });
+        }
+
+        refreshTimestamps();
+        setInterval(refreshTimestamps, 1000);
+        // ───────────────────────────────────────────────────────────────
     });
 
     window.toggleSopStep = function(stepNum) {

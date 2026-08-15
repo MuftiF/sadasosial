@@ -38,6 +38,8 @@ class PerizinanWorkflowTest extends TestCase
             'waktu_pelaksanaan' => '17 Agustus 2026',
             'deskripsi_kegiatan' => 'Promosi undian berhadiah dengan cara mengumpulkan stiker belanja.',
             'konfirmasi_wilayah' => '1',
+            'dokumen_proposal' => \Illuminate\Http\UploadedFile::fake()->create('proposal.pdf', 100),
+            'dokumen_hadiah' => \Illuminate\Http\UploadedFile::fake()->create('hadiah.pdf', 100),
         ]);
 
         $response->assertRedirect('/perizinan');
@@ -215,5 +217,61 @@ class PerizinanWorkflowTest extends TestCase
         $response->assertSee('SOP Penyelenggaraan UGB');
         $response->assertSee('SOP Pelaksanaan Pengundian');
         $response->assertSee('SOP Patroli Pengawasan');
+    }
+
+    /**
+     * Authenticated user can view the PUB SOP page.
+     */
+    public function test_user_can_view_pub_sop(): void
+    {
+        $user = User::factory()->create(['role' => 'user']);
+
+        $response = $this->actingAs($user)->get('/perizinan/sop/pub');
+        $response->assertStatus(200);
+        $response->assertSee('SOP Penerbitan Rekomendasi PUB');
+        $response->assertSee('Visual Diagram Alur Rekomendasi PUB');
+        $response->assertSee('Tabel Mutu Baku & SLA SOP Rekomendasi PUB');
+    }
+
+    /**
+     * Authenticated staff can view the Document Monitoring SOP page.
+     */
+    public function test_user_can_view_monitoring_sop(): void
+    {
+        $user = User::factory()->create(['role' => 'admin']);
+
+        $response = $this->actingAs($user)->get('/perizinan/sop/monitoring');
+        $response->assertStatus(200);
+        $response->assertSee('SOP Monitoring Masa Berlaku &amp; Riwayat Dokumen');
+        $response->assertSee('Visual Diagram Alur Monitoring Dokumen');
+        $response->assertSee('Detail Aspek Monitoring Dokumen');
+    }
+
+    /**
+     * Authenticated user can view the Izin PUB SOP page.
+     */
+    public function test_user_can_view_izin_pub_sop(): void
+    {
+        $user = User::factory()->create(['role' => 'user']);
+
+        $response = $this->actingAs($user)->get('/perizinan/sop/izin-pub');
+        $response->assertStatus(200);
+        $response->assertSee('SOP Penerbitan Izin PUB');
+        $response->assertSee('Visual Diagram Alur Izin PUB oleh DPMPTSP');
+        $response->assertSee('Tabel Mutu Baku & SLA SOP Izin PUB');
+    }
+
+    /**
+     * Authenticated user can view the Pengelolaan Barang HTT/HTDP SOP page.
+     */
+    public function test_user_can_view_pengelolaan_barang_sop(): void
+    {
+        $user = User::factory()->create(['role' => 'user']);
+
+        $response = $this->actingAs($user)->get('/perizinan/sop/pengelolaan-barang');
+        $response->assertStatus(200);
+        $response->assertSee('SOP Pengelolaan Barang HTT &amp; HTDP');
+        $response->assertSee('Visual Diagram Alur Pengelolaan Barang HTT / HTDP');
+        $response->assertSee('Tabel Mutu Baku &amp; SLA Pengelolaan Barang HTT / HTDP');
     }
 }

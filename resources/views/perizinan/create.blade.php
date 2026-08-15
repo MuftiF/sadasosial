@@ -40,11 +40,16 @@
                     </ul>
                 </div>
             </div>
-            <div class="flex gap-3">
-                <a href="{{ route('perizinan.sop.ugb') }}" class="flex-1 text-center rounded-xl bg-slate-900 py-3 text-xs font-bold text-slate-200 ring-1 ring-slate-800 hover:bg-slate-800 transition duration-200">
-                    📖 Alur SOP UGB
-                </a>
-                <a href="{{ route('perizinan.form', 'ugb') }}" class="flex-1 text-center rounded-xl bg-emerald-600 py-3 text-xs font-bold text-white hover:bg-emerald-500 transition duration-200">
+            <div class="flex flex-col gap-2.5">
+                <div class="flex gap-2">
+                    <a href="{{ route('perizinan.sop.ugb') }}" class="flex-1 text-center rounded-xl bg-slate-900 py-2.5 text-[10px] font-bold text-slate-200 ring-1 ring-slate-800 hover:bg-slate-800 transition duration-200">
+                        📖 SOP Izin &amp; Pengawasan
+                    </a>
+                    <a href="{{ route('perizinan.sop.pengelolaan_barang') }}" class="flex-1 text-center rounded-xl bg-slate-900 py-2.5 text-[10px] font-bold text-slate-200 ring-1 ring-slate-800 hover:bg-slate-800 transition duration-200">
+                        📖 SOP Barang HTT/HTDP
+                    </a>
+                </div>
+                <a href="{{ route('perizinan.form', 'ugb') }}" class="block w-full text-center rounded-xl bg-emerald-600 py-2.5 text-xs font-bold text-white hover:bg-emerald-500 transition duration-200">
                     Mulai Pengajuan &rarr;
                 </a>
             </div>
@@ -74,9 +79,19 @@
                     </ul>
                 </div>
             </div>
-            <a href="{{ route('perizinan.form', 'pub') }}" class="block w-full text-center rounded-xl bg-slate-900 py-3 text-xs font-bold text-slate-200 ring-1 ring-slate-800 hover:bg-emerald-500 hover:text-slate-950 hover:ring-0 transition duration-200">
-                Mulai Pengajuan &rarr;
-            </a>
+            <div class="flex flex-col gap-2.5">
+                <div class="flex gap-2">
+                    <a href="{{ route('perizinan.sop.pub') }}" class="flex-1 text-center rounded-xl bg-slate-900 py-2.5 text-[10px] font-bold text-slate-200 ring-1 ring-slate-800 hover:bg-slate-800 transition duration-200">
+                        📖 SOP Rekomendasi
+                    </a>
+                    <a href="{{ route('perizinan.sop.izin_pub') }}" class="flex-1 text-center rounded-xl bg-slate-900 py-2.5 text-[10px] font-bold text-slate-200 ring-1 ring-slate-800 hover:bg-slate-800 transition duration-200">
+                        📖 SOP Izin PUB
+                    </a>
+                </div>
+                <a href="{{ route('perizinan.form', 'pub') }}" class="block w-full text-center rounded-xl bg-emerald-600 py-2.5 text-xs font-bold text-white hover:bg-emerald-500 transition duration-200">
+                    Mulai Pengajuan &rarr;
+                </a>
+            </div>
         </div>
 
         <!-- LKS Card -->

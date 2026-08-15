@@ -23,19 +23,19 @@
     </div>
 
     <!-- Quick Role Warning / Actions Banner -->
-    @if($user->isAdmin())
-        <div class="mb-8 p-4 rounded-2xl border border-indigo-500/20 bg-indigo-500/5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+    @if($user->isVerifikator() || $user->isAdmin())
+        <div class="mb-8 p-4 rounded-2xl border border-emerald-500/20 bg-emerald-500/5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div class="flex items-center gap-3">
-                <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-500/20 text-indigo-400 font-extrabold">
+                <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/20 text-emerald-400 font-extrabold">
                     <x-heroicon-o-key class="w-5 h-5 inline-block mr-1" />
                 </span>
                 <div>
-                    <h3 class="text-sm font-bold text-slate-200">Hak Akses Administrator</h3>
-                    <p class="text-xs text-slate-400">Anda dapat memantau semua pengguna, mengelola data peran, dan mengedit user.</p>
+                    <h3 class="text-sm font-bold text-slate-200">Pusat Verifikasi &amp; Validasi User Baru</h3>
+                    <p class="text-xs text-slate-400">Anda dapat memverifikasi registrasi pengguna baru, mengulas berkas perizinan, dan mengelola akun.</p>
                 </div>
             </div>
-            <a href="{{ route('admin.users.index') }}" class="inline-flex items-center justify-center rounded-xl bg-indigo-600 px-4 py-2.5 text-xs font-bold text-white shadow-md hover:bg-indigo-500 hover:scale-[1.01] transition-all duration-200">
-                Kelola Pengguna &rarr;
+            <a href="{{ route('admin.verifikator') }}" class="inline-flex items-center justify-center rounded-xl bg-emerald-600 px-4 py-2.5 text-xs font-bold text-white shadow-md hover:bg-emerald-500 hover:scale-[1.01] transition-all duration-200">
+                Pusat Verifikator &rarr;
             </a>
         </div>
     @endif
@@ -141,6 +141,42 @@
         @endif
     </div>
 
+    <!-- Modul Utama Layanan Grid -->
+    <div class="mb-10">
+        <h3 class="text-lg font-bold text-white border-b border-slate-900 pb-3 mb-6">Modul Layanan SADA SOSIAL</h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- Card 1: Layanan Perizinan -->
+            <a href="{{ route('perizinan.index') }}" class="glass-panel rounded-2xl p-6 hover:border-emerald-500/40 hover:scale-[1.01] transition-all duration-200 block group">
+                <div class="flex items-center gap-3 mb-3">
+                    <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/10 text-emerald-600 text-lg">📝</span>
+                    <h4 class="text-sm font-extrabold text-white group-hover:text-emerald-400 transition-colors font-sans">Layanan Perizinan</h4>
+                </div>
+                <p class="text-xs text-slate-500 leading-relaxed mb-4">Pengajuan perizinan UGB, Rekomendasi/Izin PUB, Izin LKS, dan adopsi anak.</p>
+                <span class="text-xs font-bold text-emerald-600 group-hover:underline">Buka Layanan &rarr;</span>
+            </a>
+
+            <!-- Card 2: Pemberdayaan Sosial -->
+            <a href="{{ route('pemberdayaan.index') }}" class="glass-panel rounded-2xl p-6 hover:border-indigo-500/40 hover:scale-[1.01] transition-all duration-200 block group">
+                <div class="flex items-center gap-3 mb-3">
+                    <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-500/10 text-indigo-600 text-lg">🚀</span>
+                    <h4 class="text-sm font-extrabold text-white group-hover:text-indigo-400 transition-colors font-sans">Pemberdayaan Sosial</h4>
+                </div>
+                <p class="text-xs text-slate-500 leading-relaxed mb-4">Pembinaan kelembagaan, pilar-pilar sosial, fasilitasi komunitas, dan kepahlawanan.</p>
+                <span class="text-xs font-bold text-indigo-600 group-hover:underline">Buka Modul &rarr;</span>
+            </a>
+
+            <!-- Card 3: Rehabilitasi Sosial -->
+            <a href="{{ route('rehabilitasi.index') }}" class="glass-panel rounded-2xl p-6 hover:border-teal-500/40 hover:scale-[1.01] transition-all duration-200 block group">
+                <div class="flex items-center gap-3 mb-3">
+                    <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-teal-500/10 text-teal-600 text-lg font-sans">👶</span>
+                    <h4 class="text-sm font-extrabold text-white group-hover:text-teal-400 transition-colors font-sans">Rehabilitasi Sosial</h4>
+                </div>
+                <p class="text-xs text-slate-500 leading-relaxed mb-4">Pelayanan rehabilitasi anak, lansia, disabilitas, korban kekerasan/TPPO, dan rujukan UPTD.</p>
+                <span class="text-xs font-bold text-teal-600 group-hover:underline">Buka Modul &rarr;</span>
+            </a>
+        </div>
+    </div>
+
     <!-- Permohonan Section -->
     <div class="space-y-6">
         @if($user->isStaff())
@@ -156,13 +192,19 @@
                 </p>
                 @php
                     $dashboardRoute = 'admin.sekretariat';
+                    $useDirectUrl = false;
+                    $directUrl = '';
                     if ($user->role === 'verifikator') { $dashboardRoute = 'admin.verifikator'; }
                     elseif ($user->role === 'dinsos_wilayah') { $dashboardRoute = 'admin.wilayah'; }
                     elseif ($user->role === 'bidang_pemberdayaan') { $dashboardRoute = 'admin.pemberdayaan'; }
                     elseif ($user->role === 'bidang_linjamsos') { $dashboardRoute = 'admin.linjamsos'; }
                     elseif ($user->role === 'kadinas') { $dashboardRoute = 'admin.kadinas'; }
+                    elseif (in_array($user->role, ['analis_rehabilitasi', 'kasi_rehabilitasi', 'kabid_rehabilitasi', 'uptd_mitra', 'bidang_rehabilitasi'])) {
+                        $useDirectUrl = true;
+                        $directUrl = route('rehabilitasi.index');
+                    }
                 @endphp
-                <a href="{{ route($dashboardRoute) }}" class="inline-flex items-center justify-center rounded-xl bg-emerald-600 px-6 py-3 text-xs font-bold text-white shadow-md hover:bg-emerald-500 transition duration-200">
+                <a href="{{ $useDirectUrl ? $directUrl : route($dashboardRoute) }}" class="inline-flex items-center justify-center rounded-xl bg-emerald-600 px-6 py-3 text-xs font-bold text-white shadow-md hover:bg-emerald-500 transition duration-200">
                     Buka Antrean Tugas &rarr;
                 </a>
             </div>

@@ -10,12 +10,15 @@ use App\Models\AccessAuditLog;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
+use App\Notifications\AccountVerifiedNotification;
+use App\Notifications\AccountRejectedNotification;
 
 class UserManagementController extends Controller
 {
     /**
-     * Display a listing of the users.
+     * Display a listing of the users & verifikator management.
      */
     public function index(Request $request)
     {
@@ -43,6 +46,12 @@ class UserManagementController extends Controller
         // Eager load validation logs for detail modal
         $users = $query->with(['validationLogs'])->orderBy('created_at', 'desc')->paginate(10)->withQueryString();
 
+        // Pending user registrations needing validation (Subproses 1.5)
+        $pendingUsers = User::where('validation_status', 'pending')
+            ->with(['validationLogs'])
+            ->orderBy('created_at', 'desc')
+            ->get();
+
         // Fetch pending profile change requests
         $profileRequests = ProfileUpdateRequest::with('user')
             ->where('status', 'pending')
@@ -55,7 +64,16 @@ class UserManagementController extends Controller
             ->take(50)
             ->get();
 
-        return view('admin.users', compact('users', 'profileRequests', 'accessAuditLogs'));
+        // Perizinan queues for verifikator
+        $queues = \App\Models\Perizinan::where('tahap_verifikasi', 'verifikator')
+            ->where('status', 'diperiksa')
+            ->with('pemohon')
+            ->latest()
+            ->get();
+
+        $user = Auth::user();
+
+        return view('admin.verifikator', compact('user', 'queues', 'users', 'pendingUsers', 'profileRequests', 'accessAuditLogs'));
     }
 
     /**
@@ -120,11 +138,22 @@ class UserManagementController extends Controller
                 'user_agent'     => $request->userAgent(),
             ]);
 
+            // Send notification email to the user
+            try {
+                if ($validated['validation_action'] === 'validated') {
+                    $user->notify(new AccountVerifiedNotification($user, $validated['validation_note'] ?? null));
+                } else {
+                    $user->notify(new AccountRejectedNotification($user, $validated['validation_note'] ?? null));
+                }
+            } catch (\Throwable $e) {
+                Log::error("Gagal mengirim email notifikasi verifikasi akun ID {$user->id}: " . $e->getMessage());
+            }
+
             $label = $validated['validation_action'] === 'validated' ? 'disetujui dan diaktifkan' : 'ditolak';
             $name = $user->isLembaga() ? $user->nama_lembaga : $user->name;
             $typeLabel = $user->isLembaga() ? 'lembaga' : 'masyarakat';
             return redirect()->route('admin.users.index')
-                ->with('success', "Akun {$typeLabel} '{$name}' berhasil {$label}.");
+                ->with('success', "Akun {$typeLabel} '{$name}' berhasil {$label}. Email pemberitahuan telah dikirimkan.");
         }
 
         $validated = $request->validate([

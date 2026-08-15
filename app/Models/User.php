@@ -76,6 +76,15 @@ class User extends Authenticatable
             'verifikator',
             'dinsos_wilayah',
             'bidang_pemberdayaan',
+            'analis_pemberdayaan',
+            'operator_pemberdayaan',
+            'kasi_pemberdayaan',
+            'kabid_pemberdayaan',
+            'bidang_rehabilitasi',
+            'analis_rehabilitasi',
+            'kasi_rehabilitasi',
+            'kabid_rehabilitasi',
+            'uptd_mitra',
             'bidang_linjamsos',
             'kadinas'
         ]);
@@ -98,7 +107,30 @@ class User extends Authenticatable
 
     public function isBidangPemberdayaan(): bool
     {
-        return $this->role === 'bidang_pemberdayaan';
+        return in_array($this->role, [
+            'admin',
+            'bidang_pemberdayaan',
+            'analis_pemberdayaan',
+            'operator_pemberdayaan',
+            'kasi_pemberdayaan',
+            'kabid_pemberdayaan'
+        ]);
+    }
+
+    public function isBidangRehabilitasi(): bool
+    {
+        return in_array($this->role, [
+            'admin',
+            'bidang_rehabilitasi',
+            'analis_rehabilitasi',
+            'kasi_rehabilitasi',
+            'kabid_rehabilitasi'
+        ]);
+    }
+
+    public function isUptdMitra(): bool
+    {
+        return $this->role === 'uptd_mitra';
     }
 
     public function isBidangLinjamsos(): bool
@@ -108,7 +140,7 @@ class User extends Authenticatable
 
     public function isKadinas(): bool
     {
-        return $this->role === 'kadinas';
+        return in_array($this->role, ['kadinas', 'admin']);
     }
 
     /**

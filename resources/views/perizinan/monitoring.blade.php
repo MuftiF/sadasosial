@@ -6,12 +6,19 @@
 <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10">
 
     <!-- Header Section -->
-    <div class="mb-10">
-        <a href="{{ route('perizinan.index') }}" class="text-xs font-bold text-emerald-400 hover:underline flex items-center gap-1.5 mb-4">
-            &larr; Kembali ke Dashboard Antrean
-        </a>
-        <h1 class="text-3xl font-extrabold text-white tracking-tight">Monitoring & Masa Berlaku Dokumen</h1>
-        <p class="text-sm text-slate-400 mt-1">Pantau seluruh surat keputusan perizinan/rekomendasi sosial aktif, kedaluwarsa, serta riwayat audittrail.</p>
+    <div class="mb-10 flex flex-col md:flex-row md:items-center justify-between gap-6 border-b border-slate-900 pb-6">
+        <div>
+            <a href="{{ route('perizinan.index') }}" class="text-xs font-bold text-emerald-400 hover:underline flex items-center gap-1.5 mb-4">
+                &larr; Kembali ke Dashboard Antrean
+            </a>
+            <h1 class="text-3xl font-extrabold text-white tracking-tight">Monitoring & Masa Berlaku Dokumen</h1>
+            <p class="text-sm text-slate-400 mt-1">Pantau seluruh surat keputusan perizinan/rekomendasi sosial aktif, kedaluwarsa, serta riwayat audittrail.</p>
+        </div>
+        <div>
+            <a href="{{ route('perizinan.sop.monitoring') }}" class="inline-flex items-center gap-1.5 rounded-xl bg-slate-900 px-4 py-2.5 text-xs font-bold text-emerald-400 ring-1 ring-slate-800 hover:bg-slate-800 transition">
+                📋 Alur SOP Monitoring
+            </a>
+        </div>
     </div>
 
     <!-- Statistics Panel -->

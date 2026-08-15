@@ -163,4 +163,41 @@ class SadaSosialAuthTest extends TestCase
             'nik' => '1234567890123456',
         ]);
     }
+
+    /**
+     * Test verifikator can approve user and trigger email notification.
+     */
+    public function test_verifikator_can_approve_user_and_trigger_email_notification(): void
+    {
+        \Illuminate\Support\Facades\Notification::fake();
+
+        $admin = User::factory()->create([
+            'role' => 'verifikator',
+        ]);
+
+        $pendingUser = User::factory()->create([
+            'role' => 'user',
+            'validation_status' => 'pending',
+            'email' => 'user.pending@example.com',
+        ]);
+
+        $response = $this->actingAs($admin)->put(route('admin.users.update', $pendingUser->id), [
+            'validation_action' => 'validated',
+            'validation_note' => 'Dokumen lengkap dan terverifikasi.',
+        ]);
+
+        $response->assertRedirect(route('admin.users.index'));
+        $this->assertDatabaseHas('users', [
+            'id' => $pendingUser->id,
+            'validation_status' => 'validated',
+        ]);
+
+        \Illuminate\Support\Facades\Notification::assertSentTo(
+            $pendingUser,
+            \App\Notifications\AccountVerifiedNotification::class,
+            function ($notification) {
+                return $notification->note === 'Dokumen lengkap dan terverifikasi.';
+            }
+        );
+    }
 }

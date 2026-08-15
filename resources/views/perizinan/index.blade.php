@@ -73,7 +73,14 @@
                     @forelse($perizinans as $p)
                         <tr class="hover:bg-slate-900/20 transition">
                             <td class="px-6 py-4 text-xs font-medium text-slate-400">
-                                {{ $p->created_at->format('d M Y H:i') }}
+                                <time
+                                    class="live-ts block font-semibold text-slate-300"
+                                    data-timestamp="{{ $p->created_at->toIso8601String() }}"
+                                    title="{{ $p->created_at->setTimezone('Asia/Jakarta')->format('d M Y, H:i:s') }} WIB"
+                                ></time>
+                                <span class="text-[10px] text-slate-500 mt-0.5 block">
+                                    {{ $p->created_at->setTimezone('Asia/Jakarta')->format('d M Y, H:i') }} WIB
+                                </span>
                             </td>
                             <td class="px-6 py-4">
                                 <div class="font-bold text-white text-sm">
@@ -160,4 +167,44 @@
         </div>
     </div>
 </div>
+
+@section('scripts')
+<script>
+(function () {
+    const WIB_OFFSET = 7 * 3600; // UTC+7 in seconds
+
+    function timeAgo(isoString) {
+        const past = new Date(isoString);
+        const now  = new Date();
+        const diff = Math.floor((now - past) / 1000); // seconds
+
+        if (diff < 5)  return 'baru saja';
+        if (diff < 60) return diff + ' detik yang lalu';
+
+        const mins = Math.floor(diff / 60);
+        if (mins < 60) return mins + ' menit yang lalu';
+
+        const hours = Math.floor(mins / 60);
+        if (hours < 24) return hours + ' jam yang lalu';
+
+        const days = Math.floor(hours / 24);
+        if (days < 7)  return days + ' hari yang lalu';
+
+        // Older than a week — show full date in WIB
+        const wib = new Date(past.getTime() + WIB_OFFSET * 1000);
+        const months = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+        return wib.getUTCDate() + ' ' + months[wib.getUTCMonth()] + ' ' + wib.getUTCFullYear();
+    }
+
+    function refreshAll() {
+        document.querySelectorAll('time.live-ts').forEach(function (el) {
+            el.textContent = timeAgo(el.dataset.timestamp);
+        });
+    }
+
+    refreshAll();
+    setInterval(refreshAll, 1000);
+})();
+</script>
+@endsection
 @endsection

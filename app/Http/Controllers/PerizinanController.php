@@ -95,8 +95,8 @@ class PerizinanController extends Controller
                 'total_hadiah' => 'required|numeric|min:0',
                 'waktu_pelaksanaan' => 'required|string|max:255',
                 'deskripsi_kegiatan' => 'required|string',
-                'dokumen_proposal' => 'required|file|mimes:pdf,docx,jpg,png|max:5120',
-                'dokumen_hadiah' => 'required|file|mimes:pdf,docx,jpg,png|max:5120',
+                'dokumen_proposal' => 'required|file|mimes:pdf,docx,jpg,png|max:10240',
+                'dokumen_hadiah' => 'required|file|mimes:pdf,docx,jpg,png|max:10240',
             ];
         } elseif ($jenis === 'pub') {
             $rules += [
@@ -123,8 +123,8 @@ class PerizinanController extends Controller
                 'alamat_lks' => 'required|string',
                 'nama_pimpinan' => 'required|string|max:255',
                 'jumlah_binaan' => 'required|integer|min:0',
-                'dokumen_akta' => 'required|file|mimes:pdf|max:5120',
-                'dokumen_domisili' => 'required|file|mimes:pdf,jpg,png|max:5120',
+                'dokumen_akta' => 'required|file|mimes:pdf|max:10240',
+                'dokumen_domisili' => 'required|file|mimes:pdf,jpg,png|max:10240',
             ];
         } elseif ($jenis === 'adopsi') {
             $rules += [
@@ -133,12 +133,13 @@ class PerizinanController extends Controller
                 'nama_ibu' => 'required|string|max:255',
                 'nik_ibu' => 'required|string|size:16',
                 'alamat_cota' => 'required|string',
-                'lama_menikah' => 'required|string|max:100',
+                'tanggal_menikah' => 'required|date',
+                'lama_menikah' => 'nullable|string|max:100',
                 'penghasilan' => 'required|numeric|min:0',
                 'nama_anak' => 'required|string|max:255',
                 'alasan_adopsi' => 'required|string',
-                'dokumen_nikah' => 'required|file|mimes:pdf,jpg,png|max:5120',
-                'dokumen_sehat' => 'required|file|mimes:pdf|max:5120',
+                'dokumen_nikah' => 'required|file|mimes:pdf,jpg,png|max:10240',
+                'dokumen_sehat' => 'required|file|mimes:pdf|max:10240',
             ];
         }
 
@@ -152,6 +153,19 @@ class PerizinanController extends Controller
             if ($key !== '_token' && $key !== 'action' && !$request->hasFile($key)) {
                 $dataTambahan[$key] = $value;
             }
+        }
+
+        if ($jenis === 'adopsi' && !empty($request->tanggal_menikah)) {
+            try {
+                $tgl = \Carbon\Carbon::parse($request->tanggal_menikah);
+                $diff = $tgl->diff(now());
+                $years = $diff->y;
+                $months = $diff->m;
+                $label = [];
+                if ($years > 0) { $label[] = "{$years} Tahun"; }
+                if ($months > 0 || $years === 0) { $label[] = "{$months} Bulan"; }
+                $dataTambahan['lama_menikah'] = implode(' ', $label);
+            } catch (\Exception $e) {}
         }
 
         // Upload files
@@ -314,8 +328,8 @@ class PerizinanController extends Controller
                 'alamat_lks' => 'required|string',
                 'nama_pimpinan' => 'required|string|max:255',
                 'jumlah_binaan' => 'required|integer|min:0',
-                'dokumen_akta' => 'nullable|file|mimes:pdf|max:5120',
-                'dokumen_domisili' => 'nullable|file|mimes:pdf,jpg,png|max:5120',
+                'dokumen_akta' => 'nullable|file|mimes:pdf|max:10240',
+                'dokumen_domisili' => 'nullable|file|mimes:pdf,jpg,png|max:10240',
             ];
         } elseif ($jenis === 'adopsi') {
             $rules += [
@@ -324,12 +338,13 @@ class PerizinanController extends Controller
                 'nama_ibu' => 'required|string|max:255',
                 'nik_ibu' => 'required|string|size:16',
                 'alamat_cota' => 'required|string',
-                'lama_menikah' => 'required|string|max:100',
+                'tanggal_menikah' => 'required|date',
+                'lama_menikah' => 'nullable|string|max:100',
                 'penghasilan' => 'required|numeric|min:0',
                 'nama_anak' => 'required|string|max:255',
                 'alasan_adopsi' => 'required|string',
-                'dokumen_nikah' => 'nullable|file|mimes:pdf,jpg,png|max:5120',
-                'dokumen_sehat' => 'nullable|file|mimes:pdf|max:5120',
+                'dokumen_nikah' => 'nullable|file|mimes:pdf,jpg,png|max:10240',
+                'dokumen_sehat' => 'nullable|file|mimes:pdf|max:10240',
             ];
         }
 
@@ -773,6 +788,38 @@ class PerizinanController extends Controller
     }
 
     /**
+     * Show interactive PUB SOP guide.
+     */
+    public function sopPub()
+    {
+        return view('perizinan.sop_pub');
+    }
+
+    /**
+     * Show interactive Izin PUB SOP guide.
+     */
+    public function sopIzinPub()
+    {
+        return view('perizinan.sop_izin_pub');
+    }
+
+    /**
+     * Show interactive Pengelolaan Barang HTT/HTDP SOP guide.
+     */
+    public function sopPengelolaanBarang()
+    {
+        return view('perizinan.sop_pengelolaan_barang');
+    }
+
+    /**
+     * Show interactive Monitoring SOP guide.
+     */
+    public function sopMonitoring()
+    {
+        return view('perizinan.sop_monitoring');
+    }
+
+    /**
      * Show form for submitting UGB execution report.
      */
     public function showLaporanForm($id)
@@ -954,14 +1001,9 @@ class PerizinanController extends Controller
     /**
      * Dedicated dashboard for Verifikator.
      */
-    public function verifikatorDashboard()
+    public function verifikatorDashboard(Request $request)
     {
-        $user = Auth::user();
-        if ($user->role !== 'verifikator' && !$user->isAdmin()) {
-            abort(403, 'Akses tidak sah untuk peran Anda.');
-        }
-        $queues = Perizinan::where('tahap_verifikasi', 'verifikator')->where('status', 'diperiksa')->with('pemohon')->latest()->get();
-        return view('admin.verifikator', compact('user', 'queues'));
+        return (new UserManagementController())->index($request);
     }
 
     /**

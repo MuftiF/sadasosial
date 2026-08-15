@@ -349,10 +349,16 @@
 
                     <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
                         <div class="space-y-1.5">
-                            <label for="lama_menikah" class="block text-xs font-bold text-slate-300 uppercase tracking-wide">Lama Pernikahan</label>
-                            <input type="text" id="lama_menikah" name="lama_menikah" required value="{{ old('lama_menikah') }}"
-                                class="block w-full rounded-xl bg-slate-950 border border-slate-800 px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-emerald-500"
-                                placeholder="6 Tahun (Sejak 2020)">
+                            <label for="tanggal_menikah" class="block text-xs font-bold text-slate-300 uppercase tracking-wide">Tanggal Pernikahan <span class="text-rose-500">*</span></label>
+                            <input type="date" id="tanggal_menikah" name="tanggal_menikah" required value="{{ old('tanggal_menikah') }}" onchange="calculateWeddingDuration()"
+                                class="block w-full rounded-xl bg-slate-950 border border-slate-800 px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-emerald-500">
+                            
+                            <input type="hidden" id="lama_menikah" name="lama_menikah" value="{{ old('lama_menikah') }}">
+                            
+                            <div id="duration_preview" class="p-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-xs font-semibold text-emerald-400 mt-2 hidden flex items-center gap-2">
+                                <span>💍 Durasi Pernikahan:</span>
+                                <span id="duration_text" class="font-bold text-white"></span>
+                            </div>
                         </div>
                         <div class="space-y-1.5">
                             <label for="penghasilan" class="block text-xs font-bold text-slate-300 uppercase tracking-wide">Total Penghasilan Bulanan (Rupiah)</label>
@@ -430,4 +436,65 @@
         </form>
     </div>
 </div>
+
+<script>
+    function calculateWeddingDuration() {
+        const input = document.getElementById('tanggal_menikah');
+        const durationPreview = document.getElementById('duration_preview');
+        const durationText = document.getElementById('duration_text');
+        const hiddenInput = document.getElementById('lama_menikah');
+
+        if (!input || !input.value) {
+            if (durationPreview) durationPreview.classList.add('hidden');
+            return;
+        }
+
+        const weddingDate = new Date(input.value);
+        const today = new Date();
+
+        if (isNaN(weddingDate.getTime()) || weddingDate > today) {
+            if (durationPreview && durationText) {
+                durationPreview.classList.remove('hidden');
+                durationPreview.classList.remove('border-emerald-500/20', 'bg-emerald-500/10', 'text-emerald-400');
+                durationPreview.classList.add('border-rose-500/20', 'bg-rose-500/10', 'text-rose-400');
+                durationText.textContent = 'Tanggal pernikahan tidak boleh di masa mendatang';
+            }
+            return;
+        }
+
+        let years = today.getFullYear() - weddingDate.getFullYear();
+        let months = today.getMonth() - weddingDate.getMonth();
+        let days = today.getDate() - weddingDate.getDate();
+
+        if (days < 0) {
+            months--;
+        }
+        if (months < 0) {
+            years--;
+            months += 12;
+        }
+
+        let resultStr = [];
+        if (years > 0) resultStr.push(years + ' Tahun');
+        if (months > 0 || years === 0) resultStr.push(months + ' Bulan');
+
+        const finalLabel = resultStr.join(' ');
+
+        if (durationPreview && durationText) {
+            durationPreview.classList.remove('hidden', 'border-rose-500/20', 'bg-rose-500/10', 'text-rose-400');
+            durationPreview.classList.add('border-emerald-500/20', 'bg-emerald-500/10', 'text-emerald-400');
+            durationText.textContent = finalLabel;
+        }
+
+        if (hiddenInput) {
+            hiddenInput.value = finalLabel;
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        if (document.getElementById('tanggal_menikah')) {
+            calculateWeddingDuration();
+        }
+    });
+</script>
 @endsection
