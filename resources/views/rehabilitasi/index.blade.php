@@ -62,6 +62,7 @@
             <div class="flex items-center justify-between mt-auto">
                 <span class="text-[10px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded-md font-bold">{{ $stats['anak'] }} Kasus</span>
                 <div class="flex gap-2">
+                    <a href="{{ route('rehabilitasi.sop.gizi_anak') }}" class="text-xs font-bold text-slate-500 hover:text-emerald-600 underline">SOP Gizi</a>
                     <a href="{{ route('rehabilitasi.subproses.index', 'anak') }}" class="text-xs font-bold text-emerald-600 hover:underline">Kasus &rarr;</a>
                 </div>
             </div>
@@ -79,6 +80,7 @@
             <div class="flex items-center justify-between mt-auto">
                 <span class="text-[10px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded-md font-bold">{{ $stats['lansia'] }} Kasus</span>
                 <div class="flex gap-2">
+                    <a href="{{ route('rehabilitasi.sop.lansia') }}" class="text-xs font-bold text-slate-500 hover:text-emerald-600 underline">SOP Lansia</a>
                     <a href="{{ route('rehabilitasi.subproses.index', 'lansia') }}" class="text-xs font-bold text-emerald-600 hover:underline">Kasus &rarr;</a>
                 </div>
             </div>
@@ -96,6 +98,7 @@
             <div class="flex items-center justify-between mt-auto">
                 <span class="text-[10px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded-md font-bold">{{ $stats['disabilitas'] }} Kasus</span>
                 <div class="flex gap-2">
+                    <a href="{{ route('rehabilitasi.sop.disabilitas') }}" class="text-xs font-bold text-slate-500 hover:text-emerald-600 underline">SOP Disabilitas</a>
                     <a href="{{ route('rehabilitasi.subproses.index', 'disabilitas') }}" class="text-xs font-bold text-emerald-600 hover:underline">Kasus &rarr;</a>
                 </div>
             </div>
@@ -113,6 +116,7 @@
             <div class="flex items-center justify-between mt-auto">
                 <span class="text-[10px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded-md font-bold">{{ $stats['tuna_sosial'] ?? 0 }} Kasus</span>
                 <div class="flex gap-2">
+                    <a href="{{ route('rehabilitasi.sop.tuna_sosial') }}" class="text-xs font-bold text-slate-500 hover:text-emerald-600 underline">SOP Pemulangan OT</a>
                     <a href="{{ route('rehabilitasi.subproses.index', 'tuna_sosial') }}" class="text-xs font-bold text-emerald-600 hover:underline">Kasus &rarr;</a>
                 </div>
             </div>
@@ -130,6 +134,7 @@
             <div class="flex items-center justify-between mt-auto">
                 <span class="text-[10px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded-md font-bold">{{ $stats['kekerasan'] }} Kasus</span>
                 <div class="flex gap-2">
+                    <a href="{{ route('rehabilitasi.sop.kekerasan_tppo') }}" class="text-xs font-bold text-slate-500 hover:text-emerald-600 underline">SOP Kekerasan &amp; TPPO</a>
                     <a href="{{ route('rehabilitasi.subproses.index', 'kekerasan') }}" class="text-xs font-bold text-emerald-600 hover:underline">Kasus &rarr;</a>
                 </div>
             </div>

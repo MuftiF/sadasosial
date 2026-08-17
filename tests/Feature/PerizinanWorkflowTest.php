@@ -242,7 +242,7 @@ class PerizinanWorkflowTest extends TestCase
 
         $response = $this->actingAs($user)->get('/perizinan/sop/monitoring');
         $response->assertStatus(200);
-        $response->assertSee('SOP Monitoring Masa Berlaku &amp; Riwayat Dokumen');
+        $response->assertSee('SOP Monitoring Masa Berlaku &amp; Riwayat Dokumen', false);
         $response->assertSee('Visual Diagram Alur Monitoring Dokumen');
         $response->assertSee('Detail Aspek Monitoring Dokumen');
     }
@@ -270,8 +270,8 @@ class PerizinanWorkflowTest extends TestCase
 
         $response = $this->actingAs($user)->get('/perizinan/sop/pengelolaan-barang');
         $response->assertStatus(200);
-        $response->assertSee('SOP Pengelolaan Barang HTT &amp; HTDP');
+        $response->assertSee('SOP Pengelolaan Barang HTT &amp; HTDP', false);
         $response->assertSee('Visual Diagram Alur Pengelolaan Barang HTT / HTDP');
-        $response->assertSee('Tabel Mutu Baku &amp; SLA Pengelolaan Barang HTT / HTDP');
+        $response->assertSee('Tabel Mutu Baku &amp; SLA Pengelolaan Barang HTT / HTDP', false);
     }
 }

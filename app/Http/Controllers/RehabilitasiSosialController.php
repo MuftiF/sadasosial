@@ -306,6 +306,38 @@ class RehabilitasiSosialController extends Controller
     }
 
     /**
+     * SOP Layanan Rehabilitasi & Pemenuhan Kebutuhan Lansia (PB 3.2)
+     */
+    public function sopLansia()
+    {
+        return view('rehabilitasi.sop_lansia');
+    }
+
+    /**
+     * SOP Penyaluran Bantuan Alat Bantu Penyandang Disabilitas (PB 3.3)
+     */
+    public function sopDisabilitas()
+    {
+        return view('rehabilitasi.sop_disabilitas');
+    }
+
+    /**
+     * SOP Pemulangan Orang Terlantar - Tuna Sosial (PB 3.4)
+     */
+    public function sopTunaSosial()
+    {
+        return view('rehabilitasi.sop_tuna_sosial');
+    }
+
+    /**
+     * SOP Pemulangan Korban Kekerasan & TPPO (PB 3.5)
+     */
+    public function sopKekerasanTppo()
+    {
+        return view('rehabilitasi.sop_kekerasan_tppo');
+    }
+
+    /**
      * Helper to count category based on role
      */
     private function countKategori($kategori)
