@@ -71,6 +71,10 @@ Route::middleware('auth')->group(function () {
             Route::get('/', [RehabilitasiSosialController::class, 'index'])->name('index');
             Route::get('/monitoring', [RehabilitasiSosialController::class, 'monitoringIndex'])->name('monitoring');
             Route::get('/sop/gizi-anak', [RehabilitasiSosialController::class, 'sopGiziAnak'])->name('sop.gizi_anak');
+            Route::get('/sop/lansia', [RehabilitasiSosialController::class, 'sopLansia'])->name('sop.lansia');
+            Route::get('/sop/disabilitas', [RehabilitasiSosialController::class, 'sopDisabilitas'])->name('sop.disabilitas');
+            Route::get('/sop/tuna-sosial', [RehabilitasiSosialController::class, 'sopTunaSosial'])->name('sop.tuna_sosial');
+            Route::get('/sop/kekerasan-tppo', [RehabilitasiSosialController::class, 'sopKekerasanTppo'])->name('sop.kekerasan_tppo');
             
             // Per Kategori Subproses
             Route::get('/kategori/{kategori}', [RehabilitasiSosialController::class, 'subprosesIndex'])->name('subproses.index');

@@ -26,6 +26,22 @@
                 <a href="{{ route('rehabilitasi.sop.gizi_anak') }}" class="inline-flex items-center justify-center rounded-xl bg-slate-900 px-4 py-2.5 text-xs font-bold text-slate-200 ring-1 ring-slate-800 hover:bg-slate-800 hover:text-white transition duration-200">
                     📋 Alur SOP Bansos Gizi Anak
                 </a>
+            @elseif($kategori === 'lansia')
+                <a href="{{ route('rehabilitasi.sop.lansia') }}" class="inline-flex items-center justify-center rounded-xl bg-amber-600 px-4 py-2.5 text-xs font-bold text-white shadow-md hover:bg-amber-700 transition duration-200">
+                    📋 Alur SOP Bansos Lansia
+                </a>
+            @elseif($kategori === 'disabilitas')
+                <a href="{{ route('rehabilitasi.sop.disabilitas') }}" class="inline-flex items-center justify-center rounded-xl bg-indigo-600 px-4 py-2.5 text-xs font-bold text-white shadow-md hover:bg-indigo-700 transition duration-200">
+                    📋 Alur SOP Alat Bantu Disabilitas
+                </a>
+            @elseif($kategori === 'tuna_sosial')
+                <a href="{{ route('rehabilitasi.sop.tuna_sosial') }}" class="inline-flex items-center justify-center rounded-xl bg-orange-600 px-4 py-2.5 text-xs font-bold text-white shadow-md hover:bg-orange-700 transition duration-200">
+                    📋 Alur SOP Pemulangan OT
+                </a>
+            @elseif($kategori === 'kekerasan')
+                <a href="{{ route('rehabilitasi.sop.kekerasan_tppo') }}" class="inline-flex items-center justify-center rounded-xl bg-rose-600 px-4 py-2.5 text-xs font-bold text-white shadow-md hover:bg-rose-700 transition duration-200">
+                    📋 Alur SOP Pemulangan TPPO
+                </a>
             @endif
             @if(!Auth::user()->isStaff() || Auth::user()->isAdmin())
                 <a href="{{ route('rehabilitasi.create', $kategori) }}" class="inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-emerald-500 to-teal-400 px-4 py-2.5 text-xs font-bold text-slate-950 shadow-md shadow-emerald-500/20 hover:opacity-90 transition duration-200">
